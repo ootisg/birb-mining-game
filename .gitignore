@@ -1,0 +1,5 @@
+lodepng.c
+lodepng.h
+glew.c
+*.o
+*.exe

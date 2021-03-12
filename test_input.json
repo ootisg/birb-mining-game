@@ -1,0 +1,127 @@
+{
+	"objs":[],
+	"events": [
+		{
+			"id":"scroll1",
+			"type":"TextEvent",
+			"duration":1800,
+			"params": {
+				"font": {
+					"name":"Courier",
+					"size":22,
+					"color":"000000",
+					"style":"bold"
+				},
+				"text": {
+					"type":"TypedTextGenerator",
+					"revealText":"Daedradic Rift",
+					"revealTime":100
+				},
+				"xPos":150,
+				"yPos":32
+			}
+		},
+		{
+			"id":"text1",
+			"type":"TextEvent",
+			"duration":10000,
+			"params": {
+				"font": {
+					"name":"Courier",
+					"size":22,
+					"color":"000000",
+					"style":"bold"
+				},
+				"text":"Daedradic Rift",
+				"xPos":150,
+				"yPos":32
+			}
+		},
+		{
+			"id":"scroll2",
+			"type":"TextEvent",
+			"duration":1500,
+			"params": {
+				"font": {
+					"name":"Courier",
+					"size":22,
+					"color":"000000",
+					"style":"bold"
+				},
+				"text": {
+					"type":"TypedTextGenerator",
+					"revealText":"Status: ",
+					"revealTime":100
+				},
+				"xPos":150,
+				"yPos":64
+			},
+			"startTrigger": {
+				"eventId":"scroll1",
+				"type":"end"
+			}
+		},
+		{
+			"id":"text2",
+			"type":"TextEvent",
+			"duration":10000,
+			"params": {
+				"font": {
+					"name":"Courier",
+					"size":22,
+					"color":"000000",
+					"style":"bold"
+				},
+				"text":"Status: ",
+				"xPos":150,
+				"yPos":64
+			}
+		},
+		{
+			"id":"rand",
+			"type":"TextEvent",
+			"duration":2400,
+			"params": {
+				"font": {
+					"name":"Courier",
+					"size":22,
+					"color":"000000",
+					"style":"bold"
+				},
+				"text": {
+					"type":"ScannerTextGenerator",
+					"pool":"@$#&?",
+					"revealTime":100,
+					"randomTime":2400,
+					"revealText":"stable"
+				},
+				"xPos":245,
+				"yPos":64
+			},
+			"startTrigger": {
+				"eventId":"scroll2",
+				"type":"end"
+			}
+		},
+		{
+			"id":"text3",
+			"type":"TextEvent",
+			"duration":1000,
+			"params": {
+				"font": {
+					"name":"Courier",
+					"size":22,
+					"color":"00FFFF",
+					"style":"bold"
+				},
+				"text":"stable",
+				"xPos":245,
+				"yPos":64
+			},
+			"startTrigger": {
+				"eventId":"rand",
+				"type":"end"
+			}
+		}
+	]
+}

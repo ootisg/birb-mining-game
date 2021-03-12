@@ -1,0 +1,18 @@
+{
+"layout":[
+	{
+		"type":"grid",
+		"width":0.125f,
+		"height":0.125f,
+		"layout":[
+			{
+				"type":"rect",
+				"x":0.125f,
+				"y":0.125f,
+				"width":0.1f,
+				"height":0.1f
+			}
+		]
+	}
+]
+}
