@@ -258,6 +258,8 @@ void init () {
 	frame_count = 0;
 	g_resources.refresh_texture = 1;
 	make_resources ();
+	g_free_objects = init_stack (sizeof (GLfloat*));
+	game_init ();
 }
 
 void render () {
@@ -306,6 +308,7 @@ void display () {
 	//Clear the screen
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//Do the game logic
+	game_logic_loop ();
 	object_handler* object_handler = get_global_object_handler ();
 	run_objs_game_logic (object_handler);
 	//Render game objects
@@ -340,8 +343,7 @@ void example_game_logic (game_object* obj) {
 }
 
 void test () {
-	g_free_objects = init_stack (sizeof (GLfloat*));
-	void* obj_ptr = malloc (sizeof (game_object));
+	/*void* obj_ptr = malloc (sizeof (game_object));
 	test_obj = make_game_object (obj_ptr, "TEST");
 	test_obj->game_logic_call = example_game_logic;
 	
@@ -392,7 +394,7 @@ void test () {
 	generate_hitbox (obj5);
 	
 	//obj6
-	obj6->sprite = make_sprite_from_json ("resources/sprites/config/blockmerge.json", "resources/sprites/blockmerge.png");
+	obj6->sprite = make_sprite_from_json ("resources/sprites/config/birb.json", NULL);
 	obj6->x = .0;
 	obj6->y = .7;
 	obj6->width = .25;
@@ -434,7 +436,7 @@ void test () {
 	printf ("Val: %d\n", (int)hash_table_get (table, "NUM_NINE", 9));
 	printf ("Val: %d\n", (int)hash_table_get (table, "NUM_FIFTEEN", 12));
 	printf ("Val: %d\n", (int)hash_table_get (table, "NUM_THREE", 10));
-	printf ("Val: %d\n", (int)hash_table_get (table, "NUM_TWENTY", 11));*/
+	printf ("Val: %d\n", (int)hash_table_get (table, "NUM_TWENTY", 11));
 	//json_object* jobj = parse_json ("{\"HEKK\":{\"POOpY\":16,\"furries\":[0,5,15,33,{\"type\":\"EPIC GAMER\",\"o\":0},55,54,1]},\"WADU\":{\"ButtHole\":\"Yes\",\"LoOpS\":14.2}}");
 	//printf ("%d\n", ((hash_table*)jobj->token_data)->element_count);
 	int start_time = glutGet (GLUT_ELAPSED_TIME);
@@ -450,7 +452,7 @@ void test () {
 	while (cur) {
 		printf ("ID: %s\n", json_get_string ((json_object*)(cur->node_data), "id"));
 		cur = cur->next;
-	}
+	}*/
 }
 
 int get_frame_count () {
@@ -462,7 +464,7 @@ int get_frame_time_ms () {
 }
   
 int main (int argc, char** argv) {
-	printf ("HELLO WORLD");
+	printf ("HELLO BIRB!");
 	//TEST LODEPNG
 	unsigned char* img;
 	int width;
@@ -472,7 +474,7 @@ int main (int argc, char** argv) {
 	printf ("glchar %d\n", sizeof(char));
 	glutInit (&argc, argv);
 	glutInitDisplayMode (GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-	glutCreateWindow ("Hello World");
+	glutCreateWindow ("Hello Birb!");
 	glewInit ();
 	printf ("OpenGL %s\n", glGetString (GL_VERSION));
 	init_inputs ();
@@ -483,7 +485,6 @@ int main (int argc, char** argv) {
 	glutMotionFunc (mouse_motion_handler);
 	glutPassiveMotionFunc (passive_mouse_motion_handler);
 	init ();
-	test ();
 	glutMainLoop ();
 	return 0;
 }
