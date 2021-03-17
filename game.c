@@ -5,7 +5,6 @@
 
 void game_init () {
 	
-	init_birb ();
 	make_birb ();
 	
 }

@@ -70,8 +70,8 @@ void init_input_state (input_state* in_state) {
 }
 
 void copy_persistents (input_state* current, input_state* next) {
-	copy_ints ((int*)(&(next->keys_down)), (int*)(&(current->keys_down)), 256);
-	copy_ints ((int*)(&(next->mouse_buttons_down)), (int*)(&(current->mouse_buttons_down)), 4);
+	copy_ints ((int*)(&(current->keys_down)), (int*)(&(next->keys_down)), 256);
+	copy_ints ((int*)(&(current->mouse_buttons_down)), (int*)(&(next->mouse_buttons_down)), 4);
 	next->mouse_x = current->mouse_x;
 	next->mouse_y = current->mouse_y;
 	next->mouse_down = current->mouse_down;
@@ -82,7 +82,6 @@ void process_inputs (input_state* state) {
 	
 	//Process key inputs
 	for (i = 0; i < state->num_key_events; i++) {
-		
 		//Get current event
 		input_event* ev = &(state->key_events[i]);
 		
@@ -95,7 +94,6 @@ void process_inputs (input_state* state) {
 			state->keys_down[key] = 1;
 		} else if (ev->event_type == INPUT_EVENT_TYPE_KEY_UP) {
 			if (state->keys_down[key]) {
-				printf ("%c released\n", (char)key);
 				state->keys_released[key] = 1;
 			}
 			state->keys_down[key] = 0;

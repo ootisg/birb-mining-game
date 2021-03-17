@@ -317,8 +317,8 @@ void display () {
 	render ();
 	//Wait for target FPS
 	printf ("%d ms\n", glutGet (GLUT_ELAPSED_TIME) - frame_start_time);
-	while (glutGet (GLUT_ELAPSED_TIME) - frame_start_time < 17) {}
 	swap_input_buffers ();
+	while (glutGet (GLUT_ELAPSED_TIME) - frame_start_time < 17) {}
 	glutPostRedisplay ();
 }
 
