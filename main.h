@@ -13,7 +13,6 @@
 #include "render.h"
 #include "sprite.h"
 #include "stack.h"
-#include "game.h"
 
 #define RENDER_OBJECT_SIZE 24
 

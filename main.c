@@ -6,6 +6,7 @@
 #include "object_handler.h"
 #include "json.h"
 #include "layout.h"
+#include "game.h"
 
 //This file is a WIP
 //Probably not from this file, but there seems to be a severe memory leak.

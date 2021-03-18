@@ -9,7 +9,14 @@ struct rectangle {
 	float height;
 };
 
+///Just a point
+struct point {
+	float x;
+	float y;
+};
+
 typedef struct rectangle rectangle;
+typedef struct point point;
 
 ///Initializes a rectangle struct at the given pointer with the given attributes.
 ///@param ptr the location to initialize the rectangle

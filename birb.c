@@ -1,6 +1,7 @@
 #include "birb.h"
 
 #include "inputs.h"
+#include "game.h"
 
 sprite* birb_sprite = NULL;
 
@@ -49,6 +50,7 @@ game_object* make_birb () {
 	//Setup the birb's callbacks
 	birb->init_call = init_birb;
 	birb->game_logic_call = birb_logic;
+	birb->draw_call = viewport_draw;
 	
 	//Declare the birb
 	declare_game_object (get_global_object_handler (), birb);
