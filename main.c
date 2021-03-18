@@ -34,6 +34,8 @@ rectangle* checktangle;
 int frame_count;
 int frame_start_time;
 
+int fcount = 1; //Another frame count apparently
+
 struct {
 	GLuint vertex_buffer;
 	GLuint element_buffer;
@@ -152,6 +154,10 @@ GLuint free_texture (GLuint texture) {
 	glDeleteTextures (1, &texture);
 }
 
+GLuint free_buffer (GLuint buffer) {
+	glDeleteBuffers (1, &buffer);
+}
+
 GLuint make_texture (char* filename) {
 	//Read from file then make the texture
 	int width, height;
@@ -212,6 +218,8 @@ GLuint make_program (GLuint vertex_shader, GLuint frag_shader) {
 }
 
 void refresh_buffers () {
+	if (g_resources.vertex_buffer) { free_buffer (g_resources.vertex_buffer); }
+	if (g_resources.vertex_buffer) { free_buffer (g_resources.element_buffer); }
 	g_resources.vertex_buffer = make_buffer (GL_ARRAY_BUFFER, g_vertex_buffer_data, g_vertex_buffer_fill * 24 * sizeof (GLfloat));
 	g_resources.element_buffer = make_buffer (GL_ARRAY_BUFFER, g_element_buffer_data, g_vertex_buffer_fill * 4 * sizeof (GLfloat));
 }
@@ -302,6 +310,10 @@ void render () {
 	glutSwapBuffers ();
 }
 
+void do_redisplay (int id) {
+	glutPostRedisplay ();
+}
+
 void display () {
 	//Set timing properties
 	frame_start_time = glutGet (GLUT_ELAPSED_TIME);
@@ -316,11 +328,17 @@ void display () {
 	run_objs_draw (object_handler);
 	//Render the screen
 	render ();
-	//Wait for target FPS
-	printf ("%d ms\n", glutGet (GLUT_ELAPSED_TIME) - frame_start_time);
+	//Prepare to accept new inputs
 	swap_input_buffers ();
-	while (glutGet (GLUT_ELAPSED_TIME) - frame_start_time < 17) {}
-	glutPostRedisplay ();
+	//Wait for target FPS
+	printf ("frame %d: %d ms\n", fcount, glutGet (GLUT_ELAPSED_TIME) - frame_start_time);
+	int time_diff = glutGet (GLUT_ELAPSED_TIME) - frame_start_time;
+	fcount++;
+	if (time_diff >= 17) {
+		glutPostRedisplay ();
+	} else {
+		glutTimerFunc (17 - time_diff, do_redisplay, 0);
+	}
 }
 
 void example_game_logic (game_object* obj) {
