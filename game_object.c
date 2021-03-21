@@ -1,5 +1,7 @@
 #include "game_object.h"
 
+sprite* default_sprite = NULL;
+
 int default_is_colliding (game_object* this, game_object* other) {
 	if (rectangle_overlaps (&(this->hitbox), &(other->hitbox))) {
 		return 1;
@@ -19,6 +21,7 @@ game_object* make_game_object (void* ptr, char* obj_type) {
 	obj->draw_call = default_draw;
 	obj->game_logic_call = default_game_logic;
 	obj->is_colliding = default_is_colliding;
+	obj->sprite = NULL;
 	make_animation_handler (&(obj->animator));
 	return obj;
 }
@@ -28,6 +31,7 @@ void default_init (game_object* obj) {
 	obj->y = 0;
 	obj->width = 1;
 	obj->height = 1;
+	obj->sprite = default_sprite ? default_sprite : (default_sprite = make_sprite ("testure.png"));
 }
 
 void default_game_logic (game_object* obj) {
@@ -100,7 +104,7 @@ void default_draw (game_object* obj) {
 		obj->vertex_data[6] = obj->x;
 		obj->vertex_data[7] = obj->y + obj->height;
 		obj->vertex_data[9] = r->x;
-		obj->vertex_data[10] = r->y + r->height;;
+		obj->vertex_data[10] = r->y + r->height;
 		obj->vertex_data[11] = tex_id;
 		//Bottom-right
 		obj->vertex_data[12] = obj->x + obj->width;

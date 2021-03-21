@@ -1,4 +1,8 @@
-main: main.c game birb viewport inputs sprite layout render geometry char_buffer linked_list hash_table json object_handler game_object stack glew lodepng
+#vars for game files
+game_deps = game birb viewport tile_map
+game_files = game.o birb.o viewport.o tile_map.o
+#build the engine
+main: main.c game birb viewport tile_map inputs sprite layout render geometry char_buffer linked_list hash_table json object_handler game_object stack glew lodepng
 	gcc main.c $(game_files) inputs.o sprite.o layout.o render.o geometry.o char_buffer.o linked_list.o hash_table.o json.o object_handler.o game_object.o stack.o glew.o lodepng.o -DGLEW_STATIC -lopengl32 -lglu32 -lfreeglut -lglew32 -o main.exe
 inputs: inputs.c inputs.h
 	gcc inputs.c -c -LGL -Llib -lopengl32 -lglu32 -lfreeglut -lglew32
@@ -29,11 +33,11 @@ glew: glew.c
 lodepng: lodepng.c lodepng.h
 	gcc -c lodepng.c
 #builds for game files
-game_deps = game birb viewport
-game_files = game.o birb.o viewport.o
 game: game.c game.h
 	gcc game.c -c
 birb: birb.c birb.h
 	gcc birb.c -c
 viewport: viewport.c viewport.h
 	gcc viewport.c -c
+tile_map: tile_map.c tile_map.h
+	gcc tile_map.c -c

@@ -60,12 +60,19 @@ hash_table* make_hash_table (void* ptr);
 /// @return ptr cast to a hash_table_entry*, for convenience
 hash_table_entry* make_hash_table_entry (void* ptr, void* key, int key_size, void* data);
 
-/// Puts a value in the given hash_table. Duplicate keys are undefined behavior.
+/// Puts a value in the given hash_table. If the key already exists in the hash table, it's associated value is overwritten.
 /// @param table the hash_table to use
 /// @param key the key to use for storing; the key is copied
 /// @param key_size the size of the key, in bytes
 /// @param data the data to store; the pointer is used, but the data is not copied
 void hash_table_put (hash_table* table, void* key, int key_size, void* data);
+
+/// Removes a value from the given hash_table with the matching key.
+/// @param table the hash_table to use
+/// @param key the key to check for removal
+/// @param key_size the size of the key, in bytes
+/// @return 1 if an element was removed; 0 otherwise
+int hash_table_remove (hash_table* table, void* key, int key_size);
 
 /// Gets the value corresponding to the given key from the given hash_table. Returns NULL if the key is not found.
 /// @param table the hash_table to use

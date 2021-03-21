@@ -1,5 +1,6 @@
 #include "viewport.h"
 #include "inputs.h"
+#include "tile_map.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -8,6 +9,10 @@ rectangle* viewport = NULL;
 
 float last_mouse_x = -1;
 float last_mouse_y = -1;
+float min_scroll_x = 0;
+float min_scroll_y = 0;
+float max_scroll_x = MAP_GRID_WIDTH * MAP_TILE_SIZE;
+float max_scroll_y = MAP_GRID_HEIGHT * MAP_TILE_SIZE;
 
 void transform_to_viewport (rectangle* viewport, point* pt) {
 	
@@ -50,5 +55,11 @@ void update_viewport () {
 		last_mouse_x = -1;
 		last_mouse_y = -1;
 	}
+	
+	//Bound the viewport to its scroll limits
+	viewport->x = viewport->x <= min_scroll_x ? min_scroll_x : (viewport->x);
+	viewport->y = viewport->y <= min_scroll_y ? min_scroll_y : (viewport->y);
+	viewport->x = viewport->x + viewport->width > max_scroll_x ? (max_scroll_x - viewport->width) : (viewport->x);
+	viewport->y = viewport->y + viewport->height > max_scroll_y ? (max_scroll_y - viewport->height) : (viewport->y);
 	
 }

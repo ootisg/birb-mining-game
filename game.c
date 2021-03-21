@@ -2,6 +2,7 @@
 #include "birb.h"
 #include "geometry.h"
 #include "viewport.h"
+#include "tile_map.h"
 
 #include <stdio.h>
 
@@ -10,12 +11,14 @@ point scratch_pt;
 void game_init () {
 	
 	make_birb ();
+	init_map_tiles ();
 	
 }
 
 void game_logic_loop () {
 	
 	update_viewport ();
+	update_tile_objs ();
 	
 }
 

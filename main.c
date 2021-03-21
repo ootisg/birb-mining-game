@@ -504,6 +504,7 @@ int main (int argc, char** argv) {
 	glutMotionFunc (mouse_motion_handler);
 	glutPassiveMotionFunc (passive_mouse_motion_handler);
 	init ();
+	test ();
 	glutMainLoop ();
 	return 0;
 }

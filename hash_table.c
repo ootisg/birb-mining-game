@@ -102,11 +102,36 @@ void hash_table_put (hash_table* table, void* key, int key_size, void* data) {
 		//free_buckets (old_buckets, old_size);
 	}
 	
+	//Check for duplicates (and remove them), allows for overwriting old values
+	if (hash_table_get (table, key, key_size)) {
+		hash_table_remove (table, key, key_size);
+	}
+	
 	//Add a new entry to the hash table
 	hash_table_entry* new_entry = make_hash_table_entry (malloc (sizeof (hash_table_entry)), key, key_size, data);
 	int computed_hash = compute_hash (key, key_size, table->bucket_count);
 	linked_list_add (&(table->buckets[computed_hash]), new_entry, sizeof (hash_table_entry));
 	table->element_count++;
+}
+
+int hash_table_remove (hash_table* table, void* key, int key_size) {
+	
+	//Find the bucket the element is stored in
+	int computed_hash = compute_hash (key, key_size, table->bucket_count);
+	linked_list* bucket = &(table->buckets[computed_hash]);
+	linked_list_iter* iter = linked_list_get_iter (malloc (sizeof (linked_list_iter)), bucket);
+	
+	//Find and remove the matching key
+	while (linked_list_iter_has_next (iter)) {
+		hash_table_entry* entry = linked_list_iter_next (iter)->node_data;
+		if (key_size == entry->key_size && compare_bytes (key, entry->key, key_size)) {
+			linked_list_iter_remove (iter);
+			return 1;
+		}
+	}
+	
+	return 0;
+	
 }
 
 void* hash_table_get (hash_table* table, void* key, int key_size) {
