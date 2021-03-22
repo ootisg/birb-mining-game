@@ -21,7 +21,11 @@ int push (stack* s, void* element) {
 }
 
 void* pop (stack* s) {
-	return s->stack_ptr = (void*)(((char*)(s->stack_ptr)) - s->element_size);
+	
+	s->stack_ptr = (void*)(((char*)(s->stack_ptr)) - s->element_size);
+	char_buffer_remove_item (s->data, s->element_size);
+	return s->stack_ptr;
+	
 }
 
 int stack_size (stack* s) {

@@ -43,11 +43,20 @@ void char_buffer_add (char_buffer* buffer, char data) {
 	buffer->length += sizeof(char);
 }
 
+char char_buffer_remove (char_buffer* buffer) {
+	buffer->length -= sizeof(char);
+	return buffer->data[buffer->length];
+}
+
 void char_buffer_add_item (char_buffer* buffer, void* item, int size) {
 	int i;
 	for (i = 0; i < size; i++) {
 		char_buffer_add (buffer, ((char*)(item))[i]);
 	}
+}
+
+void char_buffer_remove_item (char_buffer* buffer, int size) {
+	buffer->length -= size;
 }
 
 void char_buffer_add_str (char_buffer* buffer, char* str) {

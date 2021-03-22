@@ -28,11 +28,21 @@ void extend_buffer (char_buffer* buffer);
 /// @param data char to add to the buffer
 void char_buffer_add (char_buffer* buffer, char data);
 
+/// Removes a char from the given char_buffer.
+/// @param buffer the char_buffer to remove from
+/// @return the removed char
+char char_buffer_remove (char_buffer* buffer);
+
 /// Adds a given chunk of data to the given char_buffer. Calls extend_buffer if the buffer is too small, potentially multiple times.
 /// @param buffer the char_buffer to add to
 /// @param item the data to add
 /// @param size the size of the data to add, in bytes
 void char_buffer_add_item (char_buffer* buffer, void* item, int size);
+
+/// Removes a given chunk of data from the given char_buffer.
+/// @param buffer the char_buffer to remove from
+/// @param size the size of the data to remove, in bytes
+void char_buffer_remove_item (char_buffer* buffer, int size);
 
 /// Adds the given string to the given char_buffer. Calls extend_buffer if the buffer is too small, potentially multiple times.
 /// @param buffer the char_buffer to add to

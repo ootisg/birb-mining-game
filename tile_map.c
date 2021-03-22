@@ -56,7 +56,7 @@ void assign_tile_render (int x, int y) {
 	map_tile* tile = map_get_tile (x, y);
 	make_rectangle (&(tile->bounds), x * MAP_TILE_SIZE, y * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE);
 	if (!tile->tile_obj) {
-		game_object* t_obj = *((game_object**)pop (freed_tile_obj_stack)); //I have no goddamn clue why these are double pointers
+		game_object* t_obj = *((game_object**)pop (freed_tile_obj_stack));
 		t_obj->x = x * MAP_TILE_SIZE;
 		t_obj->y = y * MAP_TILE_SIZE;
 		t_obj->width = MAP_TILE_SIZE;
