@@ -19,9 +19,12 @@
 
 #define ANIMATION_HANDLER_FINISHED 0x4
 
+#define ANIMATION_HANDLER_STILL_FRAME 0x8
+
 struct animation_handler {
 	int flags;
 	int start_time;
+	int start_frame;
 	int frame_count;
 	float frame_time;
 };
@@ -77,9 +80,14 @@ void animation_handler_set_properties (animation_handler* ptr, int properties, i
 int animation_handler_get_properties (animation_handler* ptr, int property);
 
 /// Gets the current animation frame of the given animation_handler ptr
-/// @param the animation_handler to use
+/// @param ptr the animation_handler to use
 /// @return the frame of animation the animation_handler ptr is on
 int animation_handler_get_frame (animation_handler* ptr);
+
+/// Sets the current animation frame of the given animation_handler according to frame
+/// @param ptr the animation_handler to use
+/// @param frame the frame to set
+void animation_handler_set_frame (animation_handler* ptr, int frame);
 
 /// The default init function for a game_object
 /// @param obj the game_object running this function

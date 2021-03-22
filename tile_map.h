@@ -23,6 +23,7 @@ void init_map_tiles ();
 void generate_tiles ();
 map_tile* get_tile_grid ();
 map_tile* map_get_tile (int x, int y);
+sprite* get_tileset ();
 
 void update_tile_objs ();
 

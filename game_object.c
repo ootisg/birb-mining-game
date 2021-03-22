@@ -42,19 +42,27 @@ animation_handler* make_animation_handler (void* ptr) {
 	animation_handler* h_ptr = (animation_handler*)ptr;
 	h_ptr->flags = ANIMATION_HANDLER_TYPE_MS | ANIMATION_HANDLER_LOOP_REPEAT;
 	h_ptr->start_time = get_frame_time_ms ();
+	h_ptr->start_frame = 0;
 	h_ptr->frame_count = 0;
 	h_ptr->frame_time = 17;
 	return h_ptr;
 }
 
 int animation_handler_get_frame (animation_handler* ptr) {
+	
+	//Check for still image
+	if ((ptr->flags) & ANIMATION_HANDLER_STILL_FRAME) {
+		return ptr->start_frame;
+	}
+	
+	//Animated, return the proper frame
 	int anim_frame;
 	if ((ptr->flags) & ANIMATION_HANDLER_TYPE) {
 		//Animation by ms
-		anim_frame = (int)((get_frame_time_ms () - ptr->start_time) / ptr->frame_time);
+		anim_frame = (int)((get_frame_time_ms () - ptr->start_time) / ptr->frame_time) + ptr->start_frame;
 	} else {
 		//Animation by frames
-		anim_frame = (int)((get_frame_count () - ptr->start_time) / ptr->frame_time);
+		anim_frame = (int)((get_frame_count () - ptr->start_time) / ptr->frame_time) + ptr->start_frame;
 	}
 	if ((ptr->flags) & ANIMATION_HANDLER_LOOP) {
 		//Animation loops
@@ -82,6 +90,11 @@ void animation_handler_set_properties (animation_handler* ptr, int properties, i
 
 int animation_handler_get_properties (animation_handler* ptr, int property) {
 	return (ptr->flags) & property;
+}
+
+void animation_handler_set_frame (animation_handler* ptr, int frame) {
+	ptr->start_frame = frame;
+	ptr->start_time = get_frame_time_ms ();
 }
 
 void default_draw (game_object* obj) {

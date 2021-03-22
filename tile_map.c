@@ -5,10 +5,12 @@
 #include "viewport.h"
 #include "game.h"
 #include <stdio.h>
-#define NUM_TILE_OBJS 1024
+#define NUM_TILE_OBJS 1024 //Does not need to be this large
 
 stack* tile_obj_stack;
 stack* freed_tile_obj_stack;
+
+sprite* tileset = NULL;
 
 map_tile tile_grid[MAP_GRID_HEIGHT][MAP_GRID_WIDTH];
 
@@ -32,7 +34,15 @@ void init_map_tiles () {
 			map_tile* curr = &(tile_grid[wy][wx]);
 			curr->x = wx * MAP_TILE_SIZE;
 			curr->y = wy * MAP_TILE_SIZE;
-			curr->id = 69;
+			curr->id = 1;
+		}
+	}
+	
+	//Cut out a rectangle for the birb
+	for (wx = 0; wx < 16; wx++) {
+		for (wy = 0; wy < 16; wy++) {
+			map_tile* curr = &(tile_grid[wy][wx]);
+			curr->id = 0;
 		}
 	}
 	
@@ -46,6 +56,8 @@ void init_map_tiles () {
 		declare_game_object (get_global_object_handler (), tile_obj);
 		tile_obj->x = -1;
 		tile_obj->y = -1;
+		tile_obj->sprite = get_tileset ();
+		animation_handler_set_properties (&(tile_obj->animator), ANIMATION_HANDLER_STILL_FRAME, 1);
 		push (tile_obj_stack, &tile_obj);
 		push (freed_tile_obj_stack, &tile_obj);
 	}
@@ -61,6 +73,7 @@ void assign_tile_render (int x, int y) {
 		t_obj->y = y * MAP_TILE_SIZE;
 		t_obj->width = MAP_TILE_SIZE;
 		t_obj->height = MAP_TILE_SIZE;
+		animation_handler_set_frame (&(t_obj->animator), tile->id);
 		tile->tile_obj = t_obj;
 	}
 }
@@ -108,4 +121,11 @@ map_tile* get_tile_grid () {
 
 map_tile* map_get_tile (int x, int y) {
 	return &(tile_grid[y][x]);
+}
+
+sprite* get_tileset () {
+	if (!tileset) {
+		tileset = make_sprite_from_json ("resources/sprites/config/tileset.json", NULL);
+	}
+	return tileset;
 }
