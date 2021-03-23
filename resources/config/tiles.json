@@ -1,0 +1,45 @@
+{
+	"test":"1",
+	"default": {
+		"name":"missingno",
+		"type":"bg",
+		"material":"soil",
+		"hardness":10
+	},
+	"0": {
+		"name":"sky_1",
+		"type":"bg"
+	},
+	"1": {
+		"name":"bg_1",
+		"type":"bg"
+	},
+	"2": {
+		"name":"dirt_1",
+		"type":"regular",
+		"material":"soil",
+		"hardness":10
+	},
+	"3": {
+		"name":"grass_1",
+		"type":"regular",
+		"material":"soil",
+		"hardness":10
+	},
+	"4": {
+		"name":"coal_1",
+		"type":"ore",
+		"material":"soil",
+		"hardness":15
+	},
+	"9": {
+		"name":"bg_2",
+		"type":"bg"
+	},
+	"10": {
+		"name":"dirt_2",
+		"type":"regular",
+		"material":"soil",
+		"hardness":10
+	}
+}

@@ -11,6 +11,7 @@ point scratch_pt;
 void game_init () {
 	
 	make_birb ();
+	//load_tile_properties ();
 	init_map_tiles ();
 	
 }
