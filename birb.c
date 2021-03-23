@@ -10,6 +10,9 @@ void init_birb (game_object* obj) {
 	//Run the default init
 	default_init (obj);
 	
+	//Set the birb depth
+	obj->depth = -1.0f;
+	
 	//Load the birb sprite if it's not loaded
 	if (!birb_sprite) {
 		birb_sprite = make_sprite_from_json ("resources/sprites/config/birb.json", NULL);

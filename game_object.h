@@ -44,6 +44,7 @@ struct game_object {
 	double y;
 	double width;
 	double height;
+	float depth;
 	rectangle hitbox;
 };
 

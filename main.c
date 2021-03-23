@@ -494,6 +494,7 @@ int main (int argc, char** argv) {
 	glutInit (&argc, argv);
 	glutInitDisplayMode (GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow ("Hello Birb!");
+	glEnable (GL_DEPTH_TEST);
 	glewInit ();
 	printf ("OpenGL %s\n", glGetString (GL_VERSION));
 	init_inputs ();
