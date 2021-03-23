@@ -9,18 +9,6 @@
 
 #define MAX_TILE_ID 255
 
-#define TILE_SKY_1 0
-
-#define TILE_BG_1 1
-#define TILE_BG_2 9
-
-#define TILE_DIRT_1 2
-#define TILE_DIRT_2 10
-
-#define TILE_GRASS_1 3
-
-#define TILE_COAL_1 4
-
 /// A struct for map tiles, I think
 struct map_tile {
 	int x;
