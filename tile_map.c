@@ -1,11 +1,17 @@
 #include "tile_map.h"
 
+#define STB_PERLIN_IMPLEMENTATION
+#include "stb_perlin.h"
+
 #include "stack.h"
 #include "object_handler.h"
 #include "viewport.h"
 #include "game.h"
+
 #include <stdio.h>
+
 #define NUM_TILE_OBJS 1024 //Does not need to be this large
+#define GROUND_LEVEL 14
 
 stack* tile_obj_stack;
 stack* freed_tile_obj_stack;
@@ -29,20 +35,16 @@ void init_map_tiles () {
 	
 	//Init the tile grid
 	int wx, wy;
-	for (wy = 0; wy < MAP_GRID_HEIGHT; wy++) {
+	for (wy = GROUND_LEVEL; wy < MAP_GRID_HEIGHT; wy++) {
 		for (wx = 0; wx < MAP_GRID_WIDTH; wx++) {
 			map_tile* curr = &(tile_grid[wy][wx]);
 			curr->x = wx * MAP_TILE_SIZE;
 			curr->y = wy * MAP_TILE_SIZE;
-			curr->id = 1;
-		}
-	}
-	
-	//Cut out a rectangle for the birb
-	for (wx = 0; wx < 16; wx++) {
-		for (wy = 0; wy < 16; wy++) {
-			map_tile* curr = &(tile_grid[wy][wx]);
-			curr->id = 0;
+			if (wy < GROUND_LEVEL + 2 || stb_perlin_noise3_seed((float)wx / 8 + .5, (float)wy / 8 + .5, 0.0f, 0, 0, 0, 69) >= 0) {
+				curr->id = 1;
+			} else {
+				curr->id = 0;
+			}
 		}
 	}
 	
