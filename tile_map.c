@@ -9,6 +9,7 @@
 #include "game.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #define NUM_TILE_OBJS 1024 //Does not need to be this large
 #define GROUND_LEVEL 14
@@ -19,6 +20,9 @@ stack* freed_tile_obj_stack;
 sprite* tileset = NULL;
 
 map_tile tile_grid[MAP_GRID_HEIGHT][MAP_GRID_WIDTH];
+
+int seed_1;
+float seed_2;
 
 void make_map_tile (void* ptr) {
 	
@@ -33,6 +37,10 @@ void make_map_tile (void* ptr) {
 
 void init_map_tiles () {
 	
+	//Init the RNG state
+	seed_1 = rand () % 256;
+	seed_2 = (float)rand () / RAND_MAX;
+	
 	//Init the tile grid
 	int wx, wy;
 	for (wy = GROUND_LEVEL; wy < MAP_GRID_HEIGHT; wy++) {
@@ -41,19 +49,19 @@ void init_map_tiles () {
 			curr->x = wx * MAP_TILE_SIZE;
 			curr->y = wy * MAP_TILE_SIZE;
 			if (wy >= GROUND_LEVEL + 1) {
-				if (stb_perlin_noise3_seed((float)wx / 8 + .5, (float)wy / 8 + .5, 0.0f, 0, 0, 0, 69) >= 0) {
-					curr->id = 1;
+				if (stb_perlin_noise3_seed((float)wx / 8 + .5, (float)wy / 8 + .5, seed_2, 0, 0, 0, seed_1) >= 0) {
+					curr->id = rand () > RAND_MAX / 2 ? TILE_BG_1 : TILE_BG_2;
 				} else {
 					//Soil
-					curr->id = 2;
-					if (stb_perlin_noise3_seed((float)wx / 4 + .5, (float)wy / 4 + .5, 1.0f, 0, 0, 0, 69) >= .5) {
-						curr->id = 4;
+					curr->id = rand () > RAND_MAX / 2 ? TILE_DIRT_1 : TILE_DIRT_2;
+					if (stb_perlin_noise3_seed((float)wx / 4 + .5, (float)wy / 4 + .5, seed_2 + 1.0f, 0, 0, 0, seed_1) >= .5) {
+						curr->id = TILE_COAL_1;
 					}
 				}
 			} else if (wy == GROUND_LEVEL) {
-				curr->id = 3;
+				curr->id = TILE_GRASS_1;
 			} else {
-				curr->id = 0;
+				curr->id = TILE_SKY_1;
 			}
 		}
 	}

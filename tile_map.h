@@ -7,6 +7,18 @@
 #define MAP_GRID_WIDTH 100
 #define MAP_GRID_HEIGHT 100
 
+#define TILE_SKY_1 0
+
+#define TILE_BG_1 1
+#define TILE_BG_2 9
+
+#define TILE_DIRT_1 2
+#define TILE_DIRT_2 10
+
+#define TILE_GRASS_1 3
+
+#define TILE_COAL_1 4
+
 struct map_tile {
 	int x;
 	int y;

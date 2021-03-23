@@ -11,5 +11,5 @@ void main()
     if (c.w == 0.0) {
         discard;
     }
-    gl_FragColor = texture2D (texture, texcoord_final);
+    gl_FragColor = c;
 }
