@@ -40,8 +40,18 @@ void init_map_tiles () {
 			map_tile* curr = &(tile_grid[wy][wx]);
 			curr->x = wx * MAP_TILE_SIZE;
 			curr->y = wy * MAP_TILE_SIZE;
-			if (wy < GROUND_LEVEL + 2 || stb_perlin_noise3_seed((float)wx / 8 + .5, (float)wy / 8 + .5, 0.0f, 0, 0, 0, 69) >= 0) {
-				curr->id = 1;
+			if (wy >= GROUND_LEVEL + 1) {
+				if (stb_perlin_noise3_seed((float)wx / 8 + .5, (float)wy / 8 + .5, 0.0f, 0, 0, 0, 69) >= 0) {
+					curr->id = 1;
+				} else {
+					//Soil
+					curr->id = 2;
+					if (stb_perlin_noise3_seed((float)wx / 4 + .5, (float)wy / 4 + .5, 1.0f, 0, 0, 0, 69) >= .5) {
+						curr->id = 4;
+					}
+				}
+			} else if (wy == GROUND_LEVEL) {
+				curr->id = 3;
 			} else {
 				curr->id = 0;
 			}
