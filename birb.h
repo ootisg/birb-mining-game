@@ -5,6 +5,8 @@
 #include "sprite.h"
 #include "object_handler.h"
 
+#define BIRB_MOVE_TIME 250
+
 /// Initializes the resources required for le birb
 void init_birb ();
 

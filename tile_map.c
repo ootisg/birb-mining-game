@@ -115,6 +115,20 @@ void assign_tile_render (int x, int y) {
 	}
 }
 
+void force_update_tile (map_tile* tile) {
+	int x = tile->x;
+	int y = tile->y;
+	make_rectangle (&(tile->bounds), x * MAP_TILE_SIZE, y * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE);
+	game_object* t_obj = tile->tile_obj;
+	if (t_obj) {
+		t_obj->x = x * MAP_TILE_SIZE;
+		t_obj->y = y * MAP_TILE_SIZE;
+		t_obj->width = MAP_TILE_SIZE;
+		t_obj->height = MAP_TILE_SIZE;
+		animation_handler_set_frame (&(t_obj->animator), tile->id);
+	}
+}
+
 void update_tile_objs () {
 	
 	//Remove all tile objects that are no longer in-bounds; a removed tile has a position of (-1, -1)

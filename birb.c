@@ -2,8 +2,24 @@
 
 #include "inputs.h"
 #include "game.h"
+#include "tile_map.h"
+#include "viewport.h"
 
 sprite* birb_sprite = NULL;
+
+struct birb_data {
+	int move_time;
+	int move_start;
+	float orig_x;
+	float orig_y;
+	float move_x;
+	float move_y;
+	char key_cached;
+};
+
+typedef struct birb_data birb_data;
+
+int birb_cam = 1;
 
 void init_birb (game_object* obj) {
 	
@@ -13,6 +29,23 @@ void init_birb (game_object* obj) {
 	//Set the birb depth
 	obj->depth = -1.0f;
 	
+	//Set the birb's width and height, starting position
+	obj->width = MAP_TILE_SIZE;
+	obj->height = MAP_TILE_SIZE;
+	obj->x = .5;
+	obj->y = .8125;
+	
+	//Setup the birb data
+	birb_data* obj_data = malloc (sizeof (birb_data));
+	obj->object_data = obj_data;
+	obj_data->move_time = -1;
+	obj_data->move_start = -1;
+	obj_data->orig_x = obj->x;
+	obj_data->orig_y = obj->y;
+	obj_data->move_x = 0;
+	obj_data->move_y;
+	obj_data->key_cached = 0;
+	
 	//Load the birb sprite if it's not loaded
 	if (!birb_sprite) {
 		birb_sprite = make_sprite_from_json ("resources/sprites/config/birb.json", NULL);
@@ -20,28 +53,121 @@ void init_birb (game_object* obj) {
 	
 	//Set the birb sprite and animation speed
 	obj->sprite = birb_sprite;
-	obj->animator.frame_time = 250;
+	animation_handler_set_properties (&(obj->animator), ANIMATION_HANDLER_STILL_FRAME, 1);
 	
+}
+
+void break_tile (int x, int y) {
+	map_tile* t = map_get_tile (x, y);
+	if (t->id == tile_id_by_name ("dirt_1") || t->id == tile_id_by_name ("grass_1") || t->id == tile_id_by_name ("coal_1")) {
+		t->id = tile_id_by_name ("bg_1");
+	} else if (t->id == tile_id_by_name ("dirt_2")) {
+		t->id = tile_id_by_name ("bg_2");
+	}
+	force_update_tile (t);
+}
+
+void move_to (game_object* obj, float x, float y, float frames) {
+
+	//Check for OOB
+	if (x < 0 || y < 0 || x >= MAP_GRID_WIDTH * MAP_TILE_SIZE || y >= MAP_GRID_HEIGHT * MAP_TILE_SIZE) {
+		return; //Cancel the move
+	}
+
+	//Check for tiles
+	int tile_x = x / MAP_TILE_SIZE;
+	int tile_y = y / MAP_TILE_SIZE;
+	map_tile* t = map_get_tile (tile_x, tile_y);
+	char* tile_type = get_tile_property (t->id, "type");
+	if (strcmp (tile_type, "bg")) {
+		break_tile (tile_x, tile_y);
+		return; //Cancel the move
+	}
+	
+	//Tell the birb to move
+	birb_data* obj_data = obj->object_data;
+	obj_data->orig_x = obj->x;
+	obj_data->orig_y = obj->y;
+	obj_data->move_x = x;
+	obj_data->move_y = y;
+	obj_data->move_time = frames;
+	obj_data->move_start = get_frame_time_ms ();
+	
+}
+
+int do_move (game_object* obj) {
+	birb_cam = 1;
+	birb_data* obj_data = obj->object_data;
+	float progress = (float)(get_frame_time_ms () - obj_data->move_start) / obj_data->move_time;
+	if (progress >= 1) {
+		return 1;
+	}
+	obj->x = obj_data->orig_x + (obj_data->move_x - obj_data->orig_x) * progress;
+	obj->y = obj_data->orig_y + (obj_data->move_y - obj_data->orig_y) * progress;
+	return 0;
 }
 
 void birb_logic (game_object* obj) {
 	
+	//Mess with the camera
+	if (birb_cam) {
+		get_viewport ()->x = obj->x - .5;
+		get_viewport ()->y = obj->y - .5;
+		bind_viewport ();
+	}
+	
 	//Get the inputs
 	input_state* inputs = get_inputs ();
 	
+	//Get the birb data
+	birb_data* obj_data = obj->object_data;
+	
 	//Do key checks
-	if (inputs->keys_down['w']) {
-		obj->y -= .01;
+	if (obj_data->move_start == -1) {
+		if (inputs->keys_down['w'] || obj_data->key_cached == 'w') {
+			move_to (obj, obj->x, obj->y - MAP_TILE_SIZE, BIRB_MOVE_TIME);
+			animation_handler_set_frame (&(obj->animator), 1);
+			obj_data->key_cached = 0;
+		}
+		if (inputs->keys_down['a'] || obj_data->key_cached == 'a') {
+			move_to (obj, obj->x - MAP_TILE_SIZE, obj->y, BIRB_MOVE_TIME);
+			animation_handler_set_frame (&(obj->animator), 0);
+			obj_data->key_cached = 0;
+		}
+		if (inputs->keys_down['s'] || obj_data->key_cached == 's') {
+			move_to (obj, obj->x, obj->y + MAP_TILE_SIZE, BIRB_MOVE_TIME);
+			animation_handler_set_frame (&(obj->animator), 3);
+			obj_data->key_cached = 0;
+		}
+		if (inputs->keys_down['d'] || obj_data->key_cached == 'd') {
+			move_to (obj, obj->x + MAP_TILE_SIZE, obj->y, BIRB_MOVE_TIME);
+			animation_handler_set_frame (&(obj->animator), 2);
+			obj_data->key_cached = 0;
+		}
+	} else {
+		if (inputs->keys_pressed['w']) {
+			obj_data->key_cached = obj_data->key_cached == 's' ? 0 : 'w';
+		}
+		if (inputs->keys_pressed['a']) {
+			obj_data->key_cached = obj_data->key_cached == 'd' ? 0 : 'a';
+		}
+		if (inputs->keys_pressed['s']) {
+			obj_data->key_cached = obj_data->key_cached == 'w' ? 0 : 's';
+		}
+		if (inputs->keys_pressed['d']) {
+			obj_data->key_cached = obj_data->key_cached == 'a' ? 0 : 'd';
+		}
+		if (do_move (obj)) {
+			obj->x = obj_data->move_x;
+			obj->y = obj_data->move_y;
+			obj_data->move_time = -1;
+			obj_data->move_start = -1;
+			birb_cam = 0;
+		}
 	}
-	if (inputs->keys_down['a']) {
-		obj->x -= .01;
-	}
-	if (inputs->keys_down['s']) {
-		obj->y += .01;
-	}
-	if (inputs->keys_down['d']) {
-		obj->x += .01;
-	}
+	
+	update_viewport ();
+	update_tile_objs ();
 	
 }
 

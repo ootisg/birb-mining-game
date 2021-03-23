@@ -15,4 +15,7 @@ rectangle* get_viewport ();
 /// Updates the current viewport based on user input
 void update_viewport ();
 
+//Binds the viewport to its normal bounds
+void bind_viewport ();
+
 #endif

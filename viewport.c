@@ -57,9 +57,13 @@ void update_viewport () {
 	}
 	
 	//Bound the viewport to its scroll limits
+	bind_viewport ();
+	
+}
+
+void bind_viewport () {
 	viewport->x = viewport->x <= min_scroll_x ? min_scroll_x : (viewport->x);
 	viewport->y = viewport->y <= min_scroll_y ? min_scroll_y : (viewport->y);
 	viewport->x = viewport->x + viewport->width > max_scroll_x ? (max_scroll_x - viewport->width) : (viewport->x);
 	viewport->y = viewport->y + viewport->height > max_scroll_y ? (max_scroll_y - viewport->height) : (viewport->y);
-	
 }

@@ -27,6 +27,10 @@ typedef struct map_tile map_tile;
 /// @param the location to put the new tile
 void make_map_tile (void* ptr);
 
+/// Forces the given tile to update (notably, this updates the tile's texture)
+/// @param tile the tile to update
+void force_update_tile (map_tile* tile);
+
 /// Initializes the map.
 void init_map_tiles ();
 

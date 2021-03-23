@@ -18,9 +18,6 @@ void game_init () {
 
 void game_logic_loop () {
 	
-	update_viewport ();
-	update_tile_objs ();
-	
 }
 
 void viewport_draw (game_object* obj) {
