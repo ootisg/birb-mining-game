@@ -91,6 +91,9 @@ void generate_tile (map_tile* tile) {
 			if (stb_perlin_noise3_seed((float)wx / 4 + .5, (float)wy / 4 + .5, seed_2 + 1.0f, 0, 0, 0, seed_1) >= .5) {
 				tile->id = tile_id_by_name ("coal_1");
 			}
+			if (stb_perlin_noise3_seed((float)wx / 6 + .5, (float)wy / 6 + .5, seed_2 + 1.0f, 0, 0, 0, seed_1) >= .3) {
+				tile->id = tile_id_by_name ("stone_1");
+			}
 		}
 	} else if (wy == GROUND_LEVEL) {
 		tile->id = tile_id_by_name ("grass_1");

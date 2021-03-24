@@ -15,11 +15,14 @@ struct birb_data {
 	float move_x;
 	float move_y;
 	char key_cached;
+	hash_table* drill;
+	rectangle* saved_viewport;
 };
 
 typedef struct birb_data birb_data;
 
 int birb_cam = 1;
+int shake_timer = -1;
 
 void init_birb (game_object* obj) {
 	
@@ -45,6 +48,10 @@ void init_birb (game_object* obj) {
 	obj_data->move_x = 0;
 	obj_data->move_y;
 	obj_data->key_cached = 0;
+	obj_data->saved_viewport = NULL;
+	//Setup the drill
+	obj_data->drill = make_hash_table (malloc (sizeof (hash_table)));
+	hash_table_put (obj_data->drill, "soil", 4, &(obj_data->drill));
 	
 	//Load the birb sprite if it's not loaded
 	if (!birb_sprite) {
@@ -57,12 +64,15 @@ void init_birb (game_object* obj) {
 	
 }
 
-void break_tile (int x, int y) {
+void break_tile (game_object* obj, int x, int y) {
+	birb_data* obj_data = obj->object_data;
 	map_tile* t = map_get_tile (x, y);
-	if (t->id == tile_id_by_name ("dirt_1") || t->id == tile_id_by_name ("grass_1") || t->id == tile_id_by_name ("coal_1")) {
-		t->id = tile_id_by_name ("bg_1");
-	} else if (t->id == tile_id_by_name ("dirt_2")) {
-		t->id = tile_id_by_name ("bg_2");
+	char* material = get_tile_property (t->id, "material");
+	printf ("%s\n", material);
+	if (hash_table_get (obj_data->drill, material, strlen (material))) {
+		t->id = rand () > RAND_MAX / 2 ? tile_id_by_name ("bg_1") : tile_id_by_name ("bg_2"); //Randomly choose between dirt_1 and dirt_2
+	} else {
+		shake_timer = 12;
 	}
 	force_update_tile (t);
 }
@@ -80,7 +90,7 @@ void move_to (game_object* obj, float x, float y, float frames) {
 	map_tile* t = map_get_tile (tile_x, tile_y);
 	char* tile_type = get_tile_property (t->id, "type");
 	if (strcmp (tile_type, "bg")) {
-		break_tile (tile_x, tile_y);
+		break_tile (obj, tile_x, tile_y);
 		return; //Cancel the move
 	}
 	
@@ -109,6 +119,9 @@ int do_move (game_object* obj) {
 
 void birb_logic (game_object* obj) {
 	
+	//Get the birb data
+	birb_data* obj_data = obj->object_data;
+	
 	//Mess with the camera
 	if (birb_cam) {
 		get_viewport ()->x = obj->x - .5;
@@ -116,11 +129,28 @@ void birb_logic (game_object* obj) {
 		bind_viewport ();
 	}
 	
+	//Update the camera shaky
+	if (shake_timer >= 0) {
+		if (!obj_data->saved_viewport) {
+			obj_data->saved_viewport = malloc (sizeof (rectangle));
+			obj_data->saved_viewport->x = get_viewport ()->x;
+			obj_data->saved_viewport->y = get_viewport ()->y;
+			obj_data->saved_viewport->width = get_viewport ()->width;
+			obj_data->saved_viewport->height = get_viewport ()->height;
+		}
+		rectangle* saved_viewport = obj_data->saved_viewport;
+		float offs_x = (float)rand () / RAND_MAX * .01;
+		float offs_y = (float)rand () / RAND_MAX * .01;
+		make_rectangle (get_viewport (), saved_viewport->x + offs_x, saved_viewport->y + offs_y, saved_viewport->width, saved_viewport->height);
+		shake_timer--;
+	} else if (obj_data->saved_viewport) {
+		make_rectangle (get_viewport (), obj_data->saved_viewport->x, obj_data->saved_viewport->y, obj_data->saved_viewport->width, obj_data->saved_viewport->height);
+		free (obj_data->saved_viewport);
+		obj_data->saved_viewport = NULL;
+	}
+	
 	//Get the inputs
 	input_state* inputs = get_inputs ();
-	
-	//Get the birb data
-	birb_data* obj_data = obj->object_data;
 	
 	//Do key checks
 	if (obj_data->move_start == -1) {
