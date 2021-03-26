@@ -86,7 +86,7 @@ void transfer_to_texture (texture_mapping* map, unsigned char* source, int sourc
 	
 	//Calculate the x bounds
 	int x1 = (int)(bounds->x * TEXTURE_SIZE);
-	int y1 = (int)(bounds->y * TEXTURE_SIZE); //Flip the y position to accomodate texture stuff
+	int y1 = (int)(bounds->y * TEXTURE_SIZE); //Flip the y position to accomodate texture stuff(?)
 	int x2 = x1 + source_width; //TODO unused
 	int y2 = y2 - source_height;
 	

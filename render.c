@@ -128,8 +128,8 @@ void mark_space (int tex_id, int x, int y, int width, int height) {
 
 rectangle* snap_to_textures (rectangle* ptr, rectangle* bounds) {
 	rectangle* r_ptr = (rectangle*)ptr;
-	float new_x = round (bounds->x * TEXTURE_SIZE) / TEXTURE_SIZE;
-	float new_y = round (bounds->y * TEXTURE_SIZE) / TEXTURE_SIZE;
+	float new_x = round (bounds->x * TEXTURE_SIZE) / TEXTURE_SIZE + TEXEL_CORRECTION;
+	float new_y = round (bounds->y * TEXTURE_SIZE) / TEXTURE_SIZE + TEXEL_CORRECTION;
 	float new_width = round (bounds->width * TEXTURE_SIZE) / TEXTURE_SIZE;
 	float new_height = round (bounds->height * TEXTURE_SIZE) / TEXTURE_SIZE;
 	make_rectangle (r_ptr, new_x, new_y, new_width, new_height);

@@ -13,6 +13,8 @@
 #define TEXTURE_SIZE 1024
 #define TEXTURE_TILE_SIZE 8
 
+#define TEXEL_CORRECTION 0/TEXTURE_SIZE
+
 #define MAX_OBJECTS 1048571 //Perhaps a bit excessive
 
 /// Allocates space on a 'sprite texture' for an image of the given width and height, and returns a texture_mapping representing its location.
