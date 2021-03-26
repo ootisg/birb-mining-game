@@ -1,0 +1,10 @@
+{
+"sprite_path":"resources/sprites/break.png",
+"layout":[
+	{
+		"type":"grid",
+		"width":0.25f,
+		"height":1f,
+	}
+]
+}

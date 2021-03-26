@@ -14,4 +14,6 @@ void init_birb ();
 /// @return a fresh, clean birb ready for adventure
 game_object* make_birb ();
 
+game_object* make_break_anim ();
+
 #endif
