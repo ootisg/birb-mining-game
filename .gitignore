@@ -1,5 +1,6 @@
 lodepng.c
 lodepng.h
 glew.c
+stb_perlin.h.gch
 *.o
 *.exe

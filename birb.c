@@ -6,6 +6,7 @@
 #include "viewport.h"
 
 #define BREAK_ANIM_FRAMES 4
+#define MINE_NUM_FRAMES 4
 
 sprite* birb_sprite = NULL;
 sprite* anim_sprite = NULL;
@@ -13,6 +14,7 @@ sprite* anim_sprite = NULL;
 struct birb_data {
 	int move_time;
 	int move_start;
+	int mine_time;
 	float orig_x;
 	float orig_y;
 	float move_x;
@@ -62,6 +64,7 @@ void init_birb (game_object* obj) {
 	obj->object_data = obj_data;
 	obj_data->move_time = -1;
 	obj_data->move_start = -1;
+	obj_data->mine_time = 0;
 	obj_data->orig_x = obj->x;
 	obj_data->orig_y = obj->y;
 	obj_data->move_x = 0;
@@ -131,23 +134,57 @@ void break_tile (game_object* obj, int x, int y) {
 
 void move_to (game_object* obj, float x, float y, float frames) {
 
+	//Get the birb data
+	birb_data* obj_data = obj->object_data;
+	
 	//Check for OOB
 	if (x < 0 || y < 0 || x >= MAP_GRID_WIDTH * MAP_TILE_SIZE || y >= MAP_GRID_HEIGHT * MAP_TILE_SIZE) {
 		return; //Cancel the move
 	}
 
 	//Check for tiles
-	int tile_x = x / MAP_TILE_SIZE;
-	int tile_y = y / MAP_TILE_SIZE;
+	int tile_x = (x + MAP_TILE_SIZE / 2) / MAP_TILE_SIZE;
+	int tile_y = (y + MAP_TILE_SIZE / 2) / MAP_TILE_SIZE;
 	map_tile* t = map_get_tile (tile_x, tile_y);
 	char* tile_type = get_tile_property (t->id, "type");
+	
+	//Handle tile breaking
 	if (strcmp (tile_type, "bg")) {
+		//Do the tile breaking
 		break_tile (obj, tile_x, tile_y);
+		//Set the position to center the animation around
+		if (!obj_data->mine_time) {
+			obj_data->orig_x = obj->x;
+			obj_data->orig_y = obj->y;
+		}
+		//Set the direction of the pecking (so it's always into the tile)
+		int frame = animation_handler_get_frame (&(obj->animator));
+		float mlt = 1;
+		if (frame == 0 || frame == 1) {
+			mlt = -1;
+		}
+		//Peck in the correct direction
+		if (frame == 0 || frame == 2) {
+			obj->x = obj_data->orig_x + (obj_data->mine_time % 2) * .01 * mlt;
+			obj->y = obj_data->orig_y + ((float)(rand ()) / RAND_MAX) * .005;
+		} else {
+			obj->y = obj_data->orig_y + (obj_data->mine_time % 2) * .01 * mlt;
+			obj->x = obj_data->orig_x + ((float)(rand ()) / RAND_MAX) * .005;
+		}
+		//Increase the time spent mining the block (just used for the pecking animation)
+		obj_data->mine_time++;
 		return; //Cancel the move
+	} else {
+		if (obj_data->mine_time) {
+			//Exit the mining animation
+			obj->x = obj_data->orig_x;
+			obj->y = obj_data->orig_y;
+			obj_data->mine_time = 0;
+			return; //Cancel the move
+		}
 	}
 	
 	//Tell the birb to move
-	birb_data* obj_data = obj->object_data;
 	obj_data->orig_x = obj->x;
 	obj_data->orig_y = obj->y;
 	obj_data->move_x = x;
