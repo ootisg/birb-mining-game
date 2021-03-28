@@ -310,6 +310,20 @@ void birb_logic (game_object* obj) {
 		}
 	}
 	
+	//DEBUG FUNCTION TO REVEAL ENTIRE MAP
+	if (inputs->keys_pressed['r']) {
+		int wx, wy;
+		for (wx = 0; wx < MAP_GRID_WIDTH; wx++) {
+			for (wy = 0; wy < MAP_GRID_HEIGHT; wy++) {
+				map_tile* t = map_get_tile (wx, wy);
+				if (t->id == tile_id_by_name ("unexplored")) {
+					generate_tile (t);
+					force_update_tile (t);
+				}
+			}
+		}
+	}
+	
 	update_viewport ();
 	update_tile_objs ();
 	
