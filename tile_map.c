@@ -53,7 +53,12 @@ void init_map_tiles () {
 			map_tile* curr = &(tile_grid[wy][wx]);
 			curr->x = wx;
 			curr->y = wy;
-			generate_tile (curr);
+			if (curr->y < GROUND_LEVEL) {
+				curr->id = tile_id_by_name ("sky_1");
+			} else {
+				curr->id = tile_id_by_name ("unexplored");
+			}
+			//generate_tile (curr);
 		}
 	}
 	

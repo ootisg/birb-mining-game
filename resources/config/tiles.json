@@ -32,6 +32,10 @@
 		"material":"soil",
 		"hardness":15
 	},
+	"8": {
+		"name":"unexplored",
+		"type":"bg"
+	},
 	"9": {
 		"name":"bg_2",
 		"type":"bg"

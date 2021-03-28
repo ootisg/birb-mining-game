@@ -8,6 +8,8 @@
 #define BREAK_ANIM_FRAMES 4
 #define MINE_NUM_FRAMES 4
 
+#define BIRB_REVEAL_RADIUS 4
+
 sprite* birb_sprite = NULL;
 sprite* anim_sprite = NULL;
 
@@ -206,6 +208,28 @@ int do_move (game_object* obj) {
 	return 0;
 }
 
+void reveal_around_birb (game_object* obj) {
+	int tile_x = obj->x / MAP_TILE_SIZE;
+	int tile_y = obj->y / MAP_TILE_SIZE;
+	for (int ix = -BIRB_REVEAL_RADIUS; ix <= BIRB_REVEAL_RADIUS; ix++) {
+		for (int iy = -BIRB_REVEAL_RADIUS; iy <= BIRB_REVEAL_RADIUS; iy++) {
+			int wx = tile_x + ix;
+			int wy = tile_y + iy;
+			if ((ix == -BIRB_REVEAL_RADIUS || ix == BIRB_REVEAL_RADIUS) && (iy == -BIRB_REVEAL_RADIUS || iy == BIRB_REVEAL_RADIUS)) {
+				//Don't reveal on corners
+			} else {
+				if (wx >= 0 && wx < MAP_GRID_WIDTH && wy >= 0 && wy < MAP_GRID_HEIGHT) {
+					map_tile* t = map_get_tile (wx, wy);
+					if (t->id == tile_id_by_name ("unexplored")) {
+						generate_tile (t);
+						force_update_tile (t);
+					}
+				}
+			}
+		}
+	}
+}
+
 void birb_logic (game_object* obj) {
 	
 	//Get the birb data
@@ -282,6 +306,7 @@ void birb_logic (game_object* obj) {
 			obj_data->move_time = -1;
 			obj_data->move_start = -1;
 			birb_cam = 0;
+			reveal_around_birb (obj);
 		}
 	}
 	

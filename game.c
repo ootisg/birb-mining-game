@@ -10,10 +10,9 @@ point scratch_pt;
 
 void game_init () {
 	
-	make_birb ();
-	//make_break_anim ();
-	//load_tile_properties ();
+	game_object* birb = make_birb ();
 	init_map_tiles ();
+	reveal_around_birb (birb);
 	
 }
 
