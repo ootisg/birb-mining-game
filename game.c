@@ -1,5 +1,6 @@
 #include "game.h"
 #include "birb.h"
+#include "npc.h"
 #include "geometry.h"
 #include "viewport.h"
 #include "tile_map.h"
@@ -12,7 +13,11 @@ void game_init () {
 	
 	game_object* birb = make_birb ();
 	init_map_tiles ();
+	init_npcs ();
 	reveal_around_birb (birb);
+	
+	//game_object* temp = alloc_npc ();
+	//printf ("%f,%f\n", temp->x, temp->y);
 	
 }
 

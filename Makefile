@@ -1,6 +1,6 @@
 #vars for game files
-game_deps = game birb viewport tile_map
-game_files = game.o birb.o viewport.o tile_map.o
+game_deps = game birb viewport tile_map npc
+game_files = game.o birb.o viewport.o tile_map.o npc.o
 #build the engine
 main: main.c $(game_deps) inputs sprite layout render geometry char_buffer linked_list hash_table json object_handler game_object stack glew lodepng
 	gcc main.c $(game_files) inputs.o sprite.o layout.o render.o geometry.o char_buffer.o linked_list.o hash_table.o json.o object_handler.o game_object.o stack.o glew.o lodepng.o -DGLEW_STATIC -lopengl32 -lglu32 -lfreeglut -lglew32 -o main.exe
@@ -41,3 +41,5 @@ viewport: viewport.c viewport.h
 	gcc viewport.c -c
 tile_map: tile_map.c tile_map.h
 	gcc tile_map.c stb_perlin.h -c
+npc: npc.c npc.h
+	gcc npc.c -c
