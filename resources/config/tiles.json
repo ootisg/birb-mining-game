@@ -51,5 +51,31 @@
 		"type":"regular",
 		"material":"stone",
 		"hardness":30
-	}
+	},
+	"12": {
+		"name":"gold_1",
+		"type":"ore",
+		"material":"stone",
+		"hardness":45
+	},
+	"17": {
+		"name":"bg_bluestone_1",
+		"type":"background",
+	},
+	"18": {
+		"name":"bluestone_1",
+		"type":"regular",
+		"material":"stone",
+		"hardness":30
+	},
+	"25": {
+		"name":"bg_bluestone_2",
+		"type":"background"
+	},
+	"26": {
+		"name":"bluestone_2",
+		"type":"regular",
+		"material":"stone",
+		"hardness":30
+	},
 }

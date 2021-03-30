@@ -48,17 +48,12 @@ void init_map_tiles () {
 	
 	//Init the tile grid
 	int wx, wy;
-	for (wy = GROUND_LEVEL; wy < MAP_GRID_HEIGHT; wy++) {
+	for (wy = 0; wy < MAP_GRID_HEIGHT; wy++) {
 		for (wx = 0; wx < MAP_GRID_WIDTH; wx++) {
 			map_tile* curr = &(tile_grid[wy][wx]);
 			curr->x = wx;
 			curr->y = wy;
-			if (curr->y < GROUND_LEVEL) {
-				curr->id = tile_id_by_name ("sky_1");
-			} else {
-				curr->id = tile_id_by_name ("unexplored");
-			}
-			//generate_tile (curr);
+			curr->id = tile_id_by_name ("unexplored");
 		}
 	}
 	
@@ -97,13 +92,16 @@ void generate_tile (map_tile* tile) {
 				tile->id = tile_id_by_name ("coal_1");
 			}
 			if (stb_perlin_noise3_seed((float)wx / 6 + .5, (float)wy / 6 + .5, seed_2 + 1.0f, 0, 0, 0, seed_1) >= .3) {
-				tile->id = tile_id_by_name ("stone_1");
+				tile->id = tile_id_by_name ("bluestone_1");
+				if (stb_perlin_noise3_seed((float)wx / 2 + .5, (float)wy / 2 + .5, seed_2 + 2.0f, 0, 0, 0, seed_1) >= .4) {
+					tile->id = tile_id_by_name ("gold_1");
+				}
 			}
 		}
 	} else if (wy == GROUND_LEVEL) {
-		tile->id = tile_id_by_name ("grass_1");
+		tile->id = rand () > RAND_MAX / 2 ? tile_id_by_name ("bg_1") : tile_id_by_name ("bg_1");
 	} else {
-		tile->id = tile_id_by_name ("sky_1");
+		tile->id = rand () > RAND_MAX / 2 ? tile_id_by_name ("bg_1") : tile_id_by_name ("bg_1");
 	}
 	
 }
