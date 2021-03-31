@@ -58,8 +58,8 @@ void init_birb (game_object* obj) {
 	//Set the birb's width and height, starting position
 	obj->width = MAP_TILE_SIZE;
 	obj->height = MAP_TILE_SIZE;
-	obj->x = .5;
-	obj->y = .8125;
+	obj->x = MAP_GRID_WIDTH * MAP_TILE_SIZE / 2;
+	obj->y = MAP_GRID_HEIGHT * MAP_TILE_SIZE / 2;
 	
 	//Setup the birb data
 	birb_data* obj_data = malloc (sizeof (birb_data));

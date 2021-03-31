@@ -60,7 +60,7 @@
 	},
 	"17": {
 		"name":"bg_bluestone_1",
-		"type":"background",
+		"type":"bg",
 	},
 	"18": {
 		"name":"bluestone_1",
@@ -68,9 +68,15 @@
 		"material":"stone",
 		"hardness":30
 	},
+	"20": {
+		"name":"ruby_1",
+		"type":"ore",
+		"material":"stone",
+		"hardness":55
+	},
 	"25": {
 		"name":"bg_bluestone_2",
-		"type":"background"
+		"type":"bg"
 	},
 	"26": {
 		"name":"bluestone_2",

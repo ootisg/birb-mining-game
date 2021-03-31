@@ -4,8 +4,8 @@
 #include "game_object.h"
 
 #define MAP_TILE_SIZE .0625f
-#define MAP_GRID_WIDTH 100
-#define MAP_GRID_HEIGHT 100
+#define MAP_GRID_WIDTH 400
+#define MAP_GRID_HEIGHT 400
 
 #define MAX_TILE_ID 255
 
@@ -80,5 +80,11 @@ void load_tile_properties ();
 
 /// Updates the game_object(s) used to display the map tiles. Must be called once per frame to properly display the map.
 void update_tile_objs ();
+
+/// Generator for the forest biome
+int biome_forest (int x, int y, int seed1, float seed2);
+
+/// Generator for the cyanocomb biome
+int biome_cyanocomb (int x, int y, int seed1, float seed2);
 
 #endif
