@@ -1,0 +1,10 @@
+{
+"sprite_path":"resources/sprites/items.png",
+"layout":[
+	{
+		"type":"grid",
+		"width":0.125f,
+		"height":0.125f
+	}
+]
+}

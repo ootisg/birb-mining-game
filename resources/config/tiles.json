@@ -23,12 +23,14 @@
 	"3": {
 		"name":"copper_1",
 		"type":"ore",
+		"drop":1,
 		"material":"soil",
 		"hardness":5
 	},
 	"4": {
 		"name":"coal_1",
 		"type":"ore",
+		"drop":0,
 		"material":"soil",
 		"hardness":15
 	},

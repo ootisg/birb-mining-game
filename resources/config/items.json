@@ -1,0 +1,11 @@
+{
+	"default": {
+		"name":"missingno"
+	},
+	"0": {
+		"name":"coal"
+	},
+	"1": {
+		"name":"copper"
+	}
+}

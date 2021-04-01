@@ -4,6 +4,7 @@
 #include "game.h"
 #include "tile_map.h"
 #include "viewport.h"
+#include "npc.h"
 
 #define BREAK_ANIM_FRAMES 4
 #define MINE_NUM_FRAMES 4
@@ -12,6 +13,7 @@
 
 sprite* birb_sprite = NULL;
 sprite* anim_sprite = NULL;
+sprite* items_sprite = NULL;
 
 struct birb_data {
 	int move_time;
@@ -86,6 +88,39 @@ void init_birb (game_object* obj) {
 	
 }
 
+void spawn_ore_drops (map_tile* tile) {
+	
+	//Load the items sprite if it is not already loaded
+	if (!items_sprite) {
+		items_sprite = make_sprite_from_json ("resources/sprites/config/items.json", NULL);
+	}
+	
+	//Get the ore properties
+	int drop_type = *((int*)get_tile_property (tile->id, "drop"));
+	
+	//Get the x and y coords to drop at
+	float drop_x = tile->x * MAP_TILE_SIZE;
+	float drop_y = tile->y * MAP_TILE_SIZE;
+	
+	//Drop 2-4 items
+	int count = (int)(((float)rand () / RAND_MAX) * 2) + 2;
+	int i;
+	for (i = 0; i < count; i++) {
+		//Set the item drop's position
+		game_object* curr = alloc_npc (drop_type);
+		float xoffs = ((float)rand () / RAND_MAX) * MAP_TILE_SIZE;
+		float yoffs = ((float)rand () / RAND_MAX) * MAP_TILE_SIZE;
+		curr->x = drop_x + xoffs;
+		curr->y = drop_y + yoffs;
+		curr->width = MAP_TILE_SIZE / 4;
+		curr->height = MAP_TILE_SIZE / 4;
+		//Setup the item drop's sprite
+		curr->sprite = items_sprite;
+		animation_handler_set_properties (&(curr->animator), ANIMATION_HANDLER_STILL_FRAME, 1);
+		animation_handler_set_frame (&(curr->animator), drop_type);
+	}
+}
+
 void break_tile (game_object* obj, int x, int y) {
 	
 	//Get some important data
@@ -115,6 +150,10 @@ void break_tile (game_object* obj, int x, int y) {
 					animation_handler_set_frame (&(obj_data->brk_anim->animator), frame);
 				} else {
 					//Destroy the tile
+					char* tile_type = get_tile_property (t->id, "type");
+					if (!strcmp (tile_type, "ore")) {
+						spawn_ore_drops (t);
+					}
 					t->id = rand () > RAND_MAX / 2 ? tile_id_by_name ("bg_1") : tile_id_by_name ("bg_2");
 					obj_data->brk_anim->x = -1;
 					obj_data->brk_anim->y = -1;

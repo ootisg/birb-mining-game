@@ -12,17 +12,9 @@ point scratch_pt;
 void game_init () {
 	
 	game_object* birb = make_birb ();
-	init_map_tiles ();
 	init_npcs ();
+	init_map_tiles ();
 	reveal_around_birb (birb);
-	
-	game_object* temp = alloc_npc ();
-	temp->x = 0;
-	temp->y = 0;
-	temp->width = .5;
-	temp->height = .5;
-	//temp->depth = 5.0f;
-	temp->sprite = make_sprite ("testure.png");
 	
 }
 
