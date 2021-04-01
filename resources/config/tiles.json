@@ -7,7 +7,7 @@
 		"hardness":10
 	},
 	"0": {
-		"name":"sky_1",
+		"name":"unexplored",
 		"type":"bg"
 	},
 	"1": {
@@ -21,10 +21,10 @@
 		"hardness":10
 	},
 	"3": {
-		"name":"grass_1",
-		"type":"regular",
+		"name":"copper_1",
+		"type":"ore",
 		"material":"soil",
-		"hardness":10
+		"hardness":5
 	},
 	"4": {
 		"name":"coal_1",
@@ -32,9 +32,13 @@
 		"material":"soil",
 		"hardness":15
 	},
-	"8": {
-		"name":"unexplored",
-		"type":"bg"
+	"6": {
+		"name":"pipe_vertical",
+		"type":"pipe"
+	},
+	"7": {
+		"name":"pipe_T_left",
+		"type":"pipe"
 	},
 	"9": {
 		"name":"bg_2",
@@ -58,6 +62,14 @@
 		"material":"stone",
 		"hardness":45
 	},
+	"14": {
+		"name":"pipe_horizontal",
+		"type":"pipe"
+	},
+	"15": {
+		"name":"pipe_T_up",
+		"type":"pipe"
+	},
 	"17": {
 		"name":"bg_bluestone_1",
 		"type":"bg",
@@ -68,11 +80,25 @@
 		"material":"stone",
 		"hardness":30
 	},
+	"19": {
+		"name":"stone_2",
+		"type":"regular",
+		"material":"stone",
+		"hardness":30
+	},
 	"20": {
 		"name":"ruby_1",
 		"type":"ore",
 		"material":"stone",
 		"hardness":55
+	},
+	"22": {
+		"name":"pipe_r_u",
+		"type":"pipe"
+	},
+	"23": {
+		"name":"pipe_T_right",
+		"type":"pipe"
 	},
 	"25": {
 		"name":"bg_bluestone_2",
@@ -84,4 +110,52 @@
 		"material":"stone",
 		"hardness":30
 	},
+	"27": {
+		"name":"spongestone_dry_1",
+		"type":"water_source",
+		"material":"stone",
+		"hardness":80
+	},
+	"28": {
+		"name":"spongestone_wet_1",
+		"type":"water_source",
+		"material":"stone",
+		"hardness":2
+	},
+	"30": {
+		"name":"pipe_b_r",
+		"type":"pipe"
+	},
+	"31": {
+		"name":"pipe_T_down",
+		"type":"pipe"
+	},
+	"35": {
+		"name":"spongestone_dry_2",
+		"type":"water_source",
+		"material":"stone",
+		"hardness":80
+	},
+	"36": {
+		"name":"spongestone_wet_2",
+		"type":"water_source",
+		"material":"stone",
+		"hardness":2
+	},
+	"38": {
+		"name":"pipe_l_b",
+		"type":"pipe"
+	},
+	"39": {
+		"name":"pipe_4way",
+		"type":"pipe"
+	},
+	"46": {
+		"name":"pipe_u_l",
+		"type":"pipe"
+	},
+	"47": {
+		"name":"copper_wire",
+		"type":"wire"
+	}
 }

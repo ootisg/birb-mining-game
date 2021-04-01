@@ -264,8 +264,11 @@ int biome_forest (int x, int y, int seed1, float seed2) {
 		if (stb_perlin_noise3_seed((float)x / 4 + .5, (float)y / 4 + .5, seed_2 + 1.0f, 0, 0, 0, seed_1) >= .5) {
 			return tile_id_by_name ("coal_1");
 		}
+		if (stb_perlin_noise3_seed((float)x / 4 + .5, (float)y / 4 + .5, seed_2 + 3.0f, 0, 0, 0, seed_1) >= .5) {
+			return tile_id_by_name ("copper_1");
+		}
 		if (stb_perlin_noise3_seed((float)x / 6 + .5, (float)y / 6 + .5, seed_2 + 1.0f, 0, 0, 0, seed_1) >= .3) {
-			return tile_id_by_name ("stone_1");
+			return rand () > RAND_MAX / 2 ? tile_id_by_name ("stone_1") : tile_id_by_name ("stone_2");
 		}
 		//Soil
 		return rand () > RAND_MAX / 2 ? tile_id_by_name ("dirt_1") : tile_id_by_name ("dirt_2");
@@ -283,6 +286,9 @@ int biome_cyanocomb (int x, int y, int seed1, float seed2) {
 		}
 		if (stb_perlin_noise3_seed((float)x + .5, (float)y + .5, seed_2 + 3.0f, 0, 0, 0, seed_1) >= .7) {
 			return tile_id_by_name ("ruby_1");
+		}
+		if (stb_perlin_noise3_seed((float)x / 6 + .5, (float)y / 6 + .5, seed_2 + 4.0f, 0, 0, 0, seed_1) >= .3) {
+			return rand () > RAND_MAX / 2 ? tile_id_by_name ("spongestone_wet_1") : tile_id_by_name ("spongestone_wet_2");
 		}
 		//Soil
 		return rand () > RAND_MAX / 2 ? tile_id_by_name ("bluestone_1") : tile_id_by_name ("bluestone_2");

@@ -16,8 +16,13 @@ void game_init () {
 	init_npcs ();
 	reveal_around_birb (birb);
 	
-	//game_object* temp = alloc_npc ();
-	//printf ("%f,%f\n", temp->x, temp->y);
+	game_object* temp = alloc_npc ();
+	temp->x = 0;
+	temp->y = 0;
+	temp->width = .5;
+	temp->height = .5;
+	//temp->depth = 5.0f;
+	temp->sprite = make_sprite ("testure.png");
 	
 }
 

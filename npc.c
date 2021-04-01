@@ -5,6 +5,7 @@ stack* free_npcs;
 
 #include "object_handler.h"
 #include "stack.h"
+#include "game.h"
 
 void init_npcs () {
 	
@@ -16,6 +17,7 @@ void init_npcs () {
 	int i;
 	for (i = 0; i < MAX_NPCS; i++) {
 		game_object* curr = make_game_object (malloc (sizeof (game_object)), "NPC");
+		//curr->draw_call = viewport_draw;
 		declare_game_object (get_global_object_handler (), curr);
 		push (all_npcs, &curr);
 		push (free_npcs, &curr);
@@ -24,7 +26,7 @@ void init_npcs () {
 }
 
 game_object* alloc_npc () {
-	return (pop (free_npcs));
+	return *((game_object**)(pop (free_npcs)));
 }
 
 void free_npc (game_object* npc) {
