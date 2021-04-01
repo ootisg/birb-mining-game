@@ -107,7 +107,7 @@ void spawn_ore_drops (map_tile* tile) {
 	int i;
 	for (i = 0; i < count; i++) {
 		//Set the item drop's position
-		game_object* curr = alloc_npc (drop_type);
+		game_object* curr = alloc_npc (0);
 		float xoffs = ((float)rand () / RAND_MAX) * MAP_TILE_SIZE;
 		float yoffs = ((float)rand () / RAND_MAX) * MAP_TILE_SIZE;
 		curr->x = drop_x + xoffs;
