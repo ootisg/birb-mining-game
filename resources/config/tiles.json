@@ -32,7 +32,7 @@
 		"type":"ore",
 		"drop":0,
 		"material":"soil",
-		"hardness":15
+		"hardness":14
 	},
 	"6": {
 		"name":"pipe_vertical",
