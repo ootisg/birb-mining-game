@@ -101,3 +101,51 @@ void transfer_to_texture (texture_mapping* map, unsigned char* source, int sourc
 	//Refresh the sprite texture
 	refresh_sprite_textures ();
 }
+
+void draw_to_sprite (sprite* spr, unsigned char* source, int frame, float x, float y, int source_width, int source_height) {
+	
+	//Setup the important data
+	rectangle* bounds = &(spr->frames[frame]);
+	unsigned int tex_id = spr->mapping->tex_id;
+	char* dest = get_sprite_texture (tex_id);
+	int* source_int = (int*)source;
+	int* dest_int = (int*)dest;
+	
+	//Calculate the bounds
+	int x1 = (int)((bounds->x + (x * bounds->width)) * TEXTURE_SIZE);
+	int y1 = (int)((bounds->y + (x * bounds->height)) * TEXTURE_SIZE);
+	
+	//Copy the image data over
+	int wx, wy;
+	for (wx = 0; wx < source_width; wx++) {
+		for (wy = 0; wy < source_height; wy++) {
+			dest_int[(wy + y1) * TEXTURE_SIZE + wx + x1] = source_int [(wy) * source_width + wx];
+		}
+	}
+	
+	//Refresh the sprite texture
+	refresh_sprite_textures ();
+	
+}
+
+void sprite_fill_rect (sprite* spr, int color, int frame, float x, float y, float width, float height) {
+	
+	//Get the size of the rect to draw in px
+	rectangle* bounds = &(spr->frames[frame]);
+	int width_px = (int)(width * bounds->width * TEXTURE_SIZE);
+	int height_px = (int)(height * bounds->height * TEXTURE_SIZE);
+	
+	//Fill a buffer with color data
+	int* rect_pxs = malloc (sizeof (int) * width_px * height_px);
+	int i;
+	for (i = 0; i < width_px * height_px; i++) {
+		rect_pxs [i] = color;
+	}
+	
+	//Draw to the sprite
+	draw_to_sprite (spr, (unsigned char*)rect_pxs, frame, x, y, width_px, height_px);
+	
+	//Free the buffer
+	free (rect_pxs);
+	
+}

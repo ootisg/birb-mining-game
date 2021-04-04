@@ -1,0 +1,10 @@
+{
+"sprite_path":"resources/sprites/font.png",
+"layout":[
+	{
+		"type":"grid",
+		"width":0.0625f,
+		"height":0.1666667f,
+	}
+]
+}

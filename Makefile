@@ -2,8 +2,8 @@
 game_deps = game birb viewport tile_map npc
 game_files = game.o birb.o viewport.o tile_map.o npc.o
 #build the engine
-main: main.c $(game_deps) inputs sprite layout render geometry char_buffer linked_list hash_table json object_handler game_object stack glew lodepng
-	gcc main.c $(game_files) inputs.o sprite.o layout.o render.o geometry.o char_buffer.o linked_list.o hash_table.o json.o object_handler.o game_object.o stack.o glew.o lodepng.o -DGLEW_STATIC -lopengl32 -lglu32 -lfreeglut -lglew32 -o main.exe
+main: main.c $(game_deps) inputs sprite layout render geometry char_buffer linked_list hash_table json object_handler game_object stack gui glew lodepng
+	gcc main.c $(game_files) inputs.o sprite.o layout.o render.o geometry.o char_buffer.o linked_list.o hash_table.o json.o object_handler.o game_object.o stack.o gui.o glew.o lodepng.o -DGLEW_STATIC -lopengl32 -lglu32 -lfreeglut -lglew32 -o main.exe
 inputs: inputs.c inputs.h
 	gcc inputs.c -c -LGL -Llib -lopengl32 -lglu32 -lfreeglut -lglew32
 sprite: sprite.c sprite.h
@@ -28,6 +28,8 @@ object_handler: object_handler.c object_handler.h
 	gcc object_handler.c -c
 game_object: game_object.c game_object.h
 	gcc game_object.c -c
+gui: gui.c gui.h
+	gcc gui.c -c
 glew: glew.c
 	gcc -c glew.c -DGLEW_STATIC -mwindows
 lodepng: lodepng.c lodepng.h

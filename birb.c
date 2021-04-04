@@ -46,6 +46,7 @@ void init_birb (game_object* obj) {
 	//Init the sprite resources if they aren't loaded
 	if (!birb_sprite) {
 		birb_sprite = make_sprite_from_json ("resources/sprites/config/birb.json", NULL);
+		sprite_fill_rect (birb_sprite, 0xFF0000FF, 0, .25, .25, .5, .5);
 	}
 	if (!anim_sprite) {
 		anim_sprite = make_sprite_from_json ("resources/sprites/config/break.json", NULL);

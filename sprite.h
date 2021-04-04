@@ -51,4 +51,24 @@ void draw_sprite (sprite* spr, double x, double y, int frame);
 /// @param source_height the height of the source image
 void transfer_to_texture (texture_mapping* map, unsigned char* source, int source_width, int source_height);
 
+/// Draws the given buffer data to the given sprite's sprite texture
+/// @param spr the sprite to draw to
+/// @param source the source image data to transfer
+/// @param frame the frame to transfer to
+/// @param x the x-coordinate to transfer at (0-1)
+/// @param y the y-coordinate to transfer at (0-1)
+/// @param width the width of the source image (in px)
+/// @param height the height of the source image (in px)
+void draw_to_sprite (sprite* spr, unsigned char* source, int frame, float x, float y, int source_width, int source_height);
+
+/// Draws a rectangle of the given color to the given sprite's texture
+/// @param spr the sprite to draw to
+/// @param color the color to fill with
+/// @param frame the frame to transfer to
+/// @param x the x-coordinate to transfer at (0-1)
+/// @param y the y-coordinate to transfer at (0-1)
+/// @param width the width of the rectangle (0-1)
+/// @param height the height of rectangle (0-1)
+void sprite_fill_rect (sprite* spr, int color, int frame, float x, float y, float width, float height);
+
 #endif

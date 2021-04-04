@@ -8,6 +8,7 @@
 //Documentation will happen soon
 
 struct layout_element {
+	char* name;
 	rectangle bounds;
 	linked_list children;
 };
