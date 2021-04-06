@@ -2,6 +2,8 @@
 
 #include "sprite.h"
 
+unsigned char** text_chars = NULL;
+
 sprite* make_sprite_from_json (char* json_path, char* sprite_path) {
 	
 	//Read JSON file (if non-null)
@@ -113,13 +115,15 @@ void draw_to_sprite (sprite* spr, unsigned char* source, int frame, float x, flo
 	
 	//Calculate the bounds
 	int x1 = (int)((bounds->x + (x * bounds->width)) * TEXTURE_SIZE);
-	int y1 = (int)((bounds->y + (x * bounds->height)) * TEXTURE_SIZE);
+	int y1 = (int)((bounds->y + (y * bounds->height)) * TEXTURE_SIZE);
 	
 	//Copy the image data over
 	int wx, wy;
 	for (wx = 0; wx < source_width; wx++) {
 		for (wy = 0; wy < source_height; wy++) {
-			dest_int[(wy + y1) * TEXTURE_SIZE + wx + x1] = source_int [(wy) * source_width + wx];
+			if (source_int [(wy) * source_width + wx] && 0xFF000000) {
+				dest_int[(wy + y1) * TEXTURE_SIZE + wx + x1] = source_int [(wy) * source_width + wx];
+			}
 		}
 	}
 	
@@ -147,5 +151,77 @@ void sprite_fill_rect (sprite* spr, int color, int frame, float x, float y, floa
 	
 	//Free the buffer
 	free (rect_pxs);
+	
+}
+
+void img_copy (unsigned char* src, int src_width, int src_height, unsigned char* dest, int dest_width, int dest_height, int src_reigon_x, int src_reigon_y, int dest_reigon_x, int dest_reigon_y, int copy_width, int copy_height) {
+	int wx, wy;
+	for (wx = 0; wx < copy_width; wx++) {
+		for (wy = 0; wy < copy_height; wy++) {
+			int src_index = (src_reigon_y + wy) * src_width + (src_reigon_x + wx);
+			int dest_index = (dest_reigon_y + wy) * dest_width + (dest_reigon_x + wx);
+			((int*)dest)[dest_index] = ((int*)src)[src_index];
+		}
+	}
+}
+
+unsigned char* text_get_char (char c) {
+	
+	//Initialize the text data if needed
+	if (!text_chars) {
+		
+		//Decode the chars file
+		int width, height;
+		unsigned char* text_data;
+		lodepng_decode32_file (&text_data, &width, &height, "resources/sprites/font.png");
+		
+		//Check the dimensions of the text
+		if (width != TEXT_DATA_WIDTH || height != TEXT_DATA_HEIGHT) {
+			printf ("Error: text file does not have the correct dimensions (should be %dx%d)\n", TEXT_DATA_WIDTH, TEXT_DATA_HEIGHT);
+			exit (1);
+		}
+		
+		//Make the chars list
+		text_chars = malloc (sizeof (char*) * 0x5F);
+		
+		//Copy the text data over
+		int wx, wy, i;
+		i = 0;
+		for (wy = 0; wy < 0x6; wy++) {
+			for (wx = 0; wx < 0x10; wx++) {
+				int char_x = wx * TEXT_CHAR_WIDTH;
+				int char_y = wy * TEXT_CHAR_HEIGHT;
+				text_chars[i] = malloc (sizeof (int) * TEXT_CHAR_WIDTH * TEXT_CHAR_HEIGHT);
+				img_copy (text_data, TEXT_DATA_WIDTH, TEXT_DATA_HEIGHT, text_chars[i], TEXT_CHAR_WIDTH, TEXT_CHAR_HEIGHT, wx * TEXT_CHAR_WIDTH, wy * TEXT_CHAR_HEIGHT, 0, 0, TEXT_CHAR_WIDTH, TEXT_CHAR_HEIGHT);
+				i++;
+			}
+		}
+		
+	}
+	
+	//Return the char data
+	return text_chars[c - 0x20];
+	
+}
+
+void sprite_draw_char (sprite* spr, int frame, float x, float y, char c) {
+	
+	unsigned char* char_buffer = text_get_char (c);
+	draw_to_sprite (spr, char_buffer, frame, x, y, TEXT_CHAR_WIDTH, TEXT_CHAR_HEIGHT);
+	
+}
+
+void sprite_draw_string (sprite* spr, int frame, float x, float y, char* str) {
+	
+	rectangle* bounds = &(spr->frames[frame]);
+	int pixel_x = (int)((bounds->x + x * bounds->width) * TEXTURE_SIZE);
+	int i = 0;
+	while (str[i]) {
+		float f_x = (float)pixel_x / TEXTURE_SIZE;
+		float actual_x = (f_x - bounds->x) / bounds->width;
+		sprite_draw_char (spr, frame, actual_x, y, str[i]);
+		pixel_x += TEXT_CHAR_WIDTH;
+		i++;
+	}
 	
 }

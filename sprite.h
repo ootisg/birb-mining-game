@@ -11,6 +11,11 @@
 #include "layout.h"
 #include "main.h"
 
+#define TEXT_DATA_WIDTH 256
+#define TEXT_DATA_HEIGHT 144
+#define TEXT_CHAR_WIDTH 16
+#define TEXT_CHAR_HEIGHT 24
+
 /// A struct representing a sprite (woefully underdocumented)
 struct sprite {
 	unsigned char* image_data;
@@ -70,5 +75,13 @@ void draw_to_sprite (sprite* spr, unsigned char* source, int frame, float x, flo
 /// @param width the width of the rectangle (0-1)
 /// @param height the height of rectangle (0-1)
 void sprite_fill_rect (sprite* spr, int color, int frame, float x, float y, float width, float height);
+
+/// I dunno man you're on your own for this one
+void img_copy (unsigned char* src, int src_width, int src_height, unsigned char* dest, int dest_width, int dest_height, int src_reigon_x, int src_reigon_y, int dest_reigon_x, int dest_reigon_y, int copy_width, int copy_height);
+
+unsigned char* text_get_char (char c);
+
+void sprite_draw_char (sprite* spr, int frame, float x, float y, char c);
+void sprite_draw_string (sprite* spr, int frame, float x, float y, char* str);
 
 #endif

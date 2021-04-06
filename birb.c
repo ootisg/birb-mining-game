@@ -46,10 +46,10 @@ void init_birb (game_object* obj) {
 	//Init the sprite resources if they aren't loaded
 	if (!birb_sprite) {
 		birb_sprite = make_sprite_from_json ("resources/sprites/config/birb.json", NULL);
-		sprite_fill_rect (birb_sprite, 0xFF0000FF, 0, .25, .25, .5, .5);
 	}
 	if (!anim_sprite) {
-		anim_sprite = make_sprite_from_json ("resources/sprites/config/break.json", NULL);
+		//anim_sprite = make_sprite_from_json ("resources/sprites/config/break.json", NULL);
+		anim_sprite = make_sprite ("resources/sprites/text_bg.png");
 	}
 
 	//Run the default init
@@ -387,6 +387,14 @@ game_object* make_birb () {
 	
 }
 
+void text_draw_test (game_object* obj) {
+	
+	sprite_fill_rect (obj->sprite, 0xFFC0C0C0, 0, 0, 0, 1, 1);
+	sprite_draw_string (obj->sprite, 0, 0, 0, "MINING ANIMATION");
+	viewport_draw (obj);
+	
+}
+
 game_object* make_break_anim () {
 	
 	//Allocate the brk_anim
@@ -395,7 +403,7 @@ game_object* make_break_anim () {
 	//Setup the brk_anim's callbacks
 	brk_anim->init_call = default_init;
 	brk_anim->game_logic_call = default_game_logic;
-	brk_anim->draw_call = viewport_draw;
+	brk_anim->draw_call = text_draw_test;
 	
 	//Declare the brk_anim
 	declare_game_object (get_global_object_handler (), brk_anim);
@@ -406,7 +414,7 @@ game_object* make_break_anim () {
 	//Setup the break animation's size and position
 	brk_anim->x = -1;
 	brk_anim->y = -1;
-	brk_anim->width = MAP_TILE_SIZE;
+	brk_anim->width = MAP_TILE_SIZE * 8;
 	brk_anim->height = MAP_TILE_SIZE;
 	
 	//Setup the break animation's additional data

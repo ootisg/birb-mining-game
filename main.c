@@ -226,7 +226,6 @@ void refresh_buffers () {
 
 void refresh_textures () {
 	if (g_resources.refresh_texture || !g_resources.texture) {
-		printf ("THIS IS RUNNING\n");
 		if (g_resources.texture) {
 			free_texture (g_resources.texture);
 		}
