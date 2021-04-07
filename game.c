@@ -4,21 +4,50 @@
 #include "geometry.h"
 #include "viewport.h"
 #include "tile_map.h"
+#include "gui.h"
 
 #include <stdio.h>
 
 point scratch_pt;
 
+gui_component* inventory;
+
 void game_init () {
 	
+	//For now, THE ORDER IS IMPORTANT BECAUSE IT DETERMINES RENDER ORDER
+	//Make the inventory
+	json_object* params = read_json_file ("resources/config/inventory.json");
+	layout_element* layout = make_layout (malloc (sizeof (layout_element)), params);
+	inventory = malloc (sizeof (gui_component));
+	init_gui_component (inventory, "resources/config/inventory.json", make_rectangle (malloc (sizeof (rectangle)), 0, 0, 1, 1), "resources/sprites/inventory.png");
+	sprite_draw_string (inventory->ui->sprite, 0, 0, .11764f, "NOTHING TO SEE");
+	sprite_draw_string (inventory->ui->sprite, 0, 0, .20588f, "HERE...");
+	gui_component_hide (inventory);
+	
+	//Make the birb
 	game_object* birb = make_birb ();
+	
+	//Initialize the NPCS
 	init_npcs ();
+	
+	//Initialize the map tiles
 	init_map_tiles ();
+	
+	//Do misc. initializations
 	reveal_around_birb (birb);
 	
 }
 
 void game_logic_loop () {
+	
+	input_state* inputs = get_inputs ();
+	if (inputs->keys_pressed['e']) {
+		if (inventory->ui->x == -1) {
+			gui_component_show (inventory);
+		} else {
+			gui_component_hide (inventory);
+		}
+	}
 	
 }
 

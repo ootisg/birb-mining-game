@@ -49,6 +49,10 @@ void init_gui_component (void* ptr, char* layout, rectangle* bounds, char* bg) {
 
 void gui_component_init (game_object* obj) {
 	default_init (obj);
+	obj->x = .25;
+	obj->y = .25;
+	obj->width = .5;
+	obj->height = .5;
 }
 
 void gui_component_frame_event (game_object* obj) {
@@ -57,6 +61,34 @@ void gui_component_frame_event (game_object* obj) {
 
 void gui_component_draw (game_object* obj) {
 	default_draw (obj);
+}
+
+void gui_component_hide (gui_component* cpt) {
+	
+	//Store the old bounds
+	rectangle* r = &(cpt->prev_bounds);
+	r->x = cpt->ui->x;
+	r->y = cpt->ui->y;
+	r->width = cpt->ui->width;
+	r->height = cpt->ui->height;
+	
+	//Hide the GUI
+	cpt->ui->x = -1;
+	cpt->ui->y = -1;
+	cpt->ui->width = .001; //To prevent division by zero
+	cpt->ui->height = .001;
+	
+}
+
+void gui_component_show (gui_component* cpt) {
+	
+	//Show the GUI
+	rectangle* r = &(cpt->prev_bounds);
+	cpt->ui->x = r->x;
+	cpt->ui->y = r->y;
+	cpt->ui->width = r->width;
+	cpt->ui->height = r->height;
+	
 }
 
 rectangle* get_layout_elem_by_index (int index) {

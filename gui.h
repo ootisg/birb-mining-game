@@ -12,6 +12,7 @@ struct gui_component {
 	game_object* ui;
 	layout_element* layout;
 	linked_list* reigons;
+	rectangle prev_bounds;
 	struct gui_reigon_data* reigon_data;
 	void (*click_event) (struct gui_component* cpt, int index, int button, float x, float y);
 	void (*hover_event) (struct gui_component* cpt, int index, float x, float y);
@@ -29,6 +30,8 @@ void init_gui_component (void* ptr, char* layout, rectangle* bounds, char* bg);
 void gui_component_init (game_object* obj);
 void gui_component_frame_event (game_object* obj);
 void gui_component_draw (game_object* obj);
+void gui_component_hide (gui_component* cpt);
+void gui_component_show (gui_component* cpt);
 
 rectangle* get_layout_elem_by_index (int index);
 
