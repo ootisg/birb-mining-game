@@ -48,13 +48,13 @@ sprite* make_sprite_from_json (char* json_path, char* sprite_path) {
 	out_sprite->height = map->bounds.height;
 	if (layout) {
 		linked_list* frames_list = get_layout_reigons (layout, &(map->bounds));
-		printf ("%d\n", frames_list->size);
+		printf ("FRAMES: %d\n", frames_list->size);
 		out_sprite->frame_count = frames_list->size; //TODO
 		rectangle* frames = malloc (sizeof (rectangle) * frames_list->size);
 		linked_list_node* curr = frames_list->head;
 		int i = 0;
 		while (i < frames_list->size) {
-			print_rectangle (curr->node_data);
+			//print_rectangle (curr->node_data);
 			snap_to_textures (frames + i, curr->node_data);
 			i++;
 			curr = curr->next;
@@ -154,6 +154,26 @@ void sprite_fill_rect (sprite* spr, int color, int frame, float x, float y, floa
 	
 }
 
+void get_sprite_image_data (sprite* spr, int frame, unsigned char** buffer, int* width, int* height) {
+	
+	//Get the sprite texture used
+	unsigned int tex_id = spr->mapping->tex_id;
+	unsigned char* src = get_sprite_texture (tex_id);
+	
+	//Get the image attributes
+	int width_px = (int)(spr->frames[frame].width * TEXTURE_SIZE);
+	int height_px = (int)(spr->frames[frame].height * TEXTURE_SIZE);
+	int src_x = (int)(spr->frames[frame].x * TEXTURE_SIZE);
+	int src_y = (int)(spr->frames[frame].y * TEXTURE_SIZE);
+	*width = width_px;
+	*height = height_px;
+	
+	//Make and fill the buffer
+	*buffer = malloc (sizeof (int) * width_px * height_px);
+	img_copy (src, TEXTURE_SIZE, TEXTURE_SIZE, *buffer, width_px, height_px, src_x, src_y, 0, 0, width_px, height_px);
+	
+}
+
 void img_copy (unsigned char* src, int src_width, int src_height, unsigned char* dest, int dest_width, int dest_height, int src_reigon_x, int src_reigon_y, int dest_reigon_x, int dest_reigon_y, int copy_width, int copy_height) {
 	int wx, wy;
 	for (wx = 0; wx < copy_width; wx++) {
@@ -161,6 +181,19 @@ void img_copy (unsigned char* src, int src_width, int src_height, unsigned char*
 			int src_index = (src_reigon_y + wy) * src_width + (src_reigon_x + wx);
 			int dest_index = (dest_reigon_y + wy) * dest_width + (dest_reigon_x + wx);
 			((int*)dest)[dest_index] = ((int*)src)[src_index];
+		}
+	}
+}
+
+void img_copy_masked (unsigned char* src, int src_width, int src_height, unsigned char* dest, int dest_width, int dest_height, int src_reigon_x, int src_reigon_y, int dest_reigon_x, int dest_reigon_y, int copy_width, int copy_height) {
+	int wx, wy;
+	for (wx = 0; wx < copy_width; wx++) {
+		for (wy = 0; wy < copy_height; wy++) {
+			int src_index = (src_reigon_y + wy) * src_width + (src_reigon_x + wx);
+			if (((int*)src)[src_index] & 0xFF000000) {
+				int dest_index = (dest_reigon_y + wy) * dest_width + (dest_reigon_x + wx);
+				((int*)dest)[dest_index] = ((int*)src)[src_index];
+			}
 		}
 	}
 }
@@ -211,6 +244,13 @@ void sprite_draw_char (sprite* spr, int frame, float x, float y, char c) {
 	
 }
 
+void image_buffer_draw_char (unsigned char* buffer, int buffer_width, int buffer_height, int x, int y, char c) {
+	
+	unsigned char* char_buffer = text_get_char (c);
+	img_copy_masked (char_buffer, TEXT_CHAR_WIDTH, TEXT_CHAR_HEIGHT, buffer, buffer_width, buffer_height, 0, 0, x, y, TEXT_CHAR_WIDTH, TEXT_CHAR_HEIGHT);
+	
+}
+
 void sprite_draw_string (sprite* spr, int frame, float x, float y, char* str) {
 	
 	rectangle* bounds = &(spr->frames[frame]);
@@ -222,6 +262,26 @@ void sprite_draw_string (sprite* spr, int frame, float x, float y, char* str) {
 		sprite_draw_char (spr, frame, actual_x, y, str[i]);
 		pixel_x += TEXT_CHAR_WIDTH;
 		i++;
+	}
+	
+}
+
+void image_buffer_draw_string (unsigned char* buffer, int buffer_width, int buffer_height, int x, int y, char* str) {
+	
+	int i = 0;
+	while (str[i]) {
+		int c_x = x + i * TEXT_CHAR_WIDTH;
+		image_buffer_draw_char (buffer, buffer_width, buffer_height, c_x, y, str[i]);
+		i++;
+	}
+	
+}
+
+void image_buffer_fill (unsigned char* buffer, int buffer_width, int buffer_height, int color) {
+	
+	int i;
+	for (i = 0; i < buffer_width * buffer_height; i++) {
+		((int*)buffer)[i] = color;
 	}
 	
 }

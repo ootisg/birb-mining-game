@@ -7,34 +7,32 @@ void init_gui_component (void* ptr, char* layout, rectangle* bounds, char* bg) {
 	//Make the GUI component
 	gui_component* cpt = (gui_component*)ptr;
 	
-	//Load the layout from the file
-	json_object* layout_json = read_json_file (layout);
-	cpt->layout = make_layout (malloc (sizeof (layout_element)), layout_json);
-	cpt->reigons = get_layout_reigons (cpt->layout, make_rectangle (malloc (sizeof (rectangle)), 0, 0, 1, 1));
-	
-	//Initialize the image data
-	cpt->reigon_data = malloc (sizeof (gui_reigon_data) * cpt->reigons->size);
-	linked_list_node* curr = cpt->reigons->head;
-	int index = 0;
-	while (curr) {
-		rectangle* bounds = (rectangle*)curr->node_data;
-		printf ("HIA\n");
-		print_rectangle (bounds);
-		int buffer_width = (int)(bounds->width * TEXTURE_SIZE);
-		int buffer_height = (int)(bounds->height * TEXTURE_SIZE);
-		cpt->reigon_data[index].img_data = malloc (sizeof (int) * buffer_width * buffer_height);
-		cpt->reigon_data[index].mouse_status = 0;
-		curr = curr->next;
-		index++;
-	}
-	
 	//Initialize the game_object interface
 	cpt->ui = make_game_object (malloc (sizeof (game_object)), "gui_component");
 	cpt->ui->init_call = gui_component_init;
 	cpt->ui->game_logic_call = gui_component_frame_event;
 	cpt->ui->draw_call = gui_component_draw;
 	declare_game_object (get_global_object_handler (), cpt->ui);
-	cpt->ui->sprite = make_sprite (bg);
+	cpt->ui->sprite = make_sprite_from_json (layout, bg);
+	cpt->ui->object_data = cpt;
+	
+	//Initialize the reigon data
+	cpt->reigon_data = malloc (sizeof (gui_reigon_data) * cpt->ui->sprite->frame_count);
+	
+	//Initialize the image data
+	cpt->num_reigons = cpt->ui->sprite->frame_count;
+	int i;
+	for (i = 0; i < cpt->ui->sprite->frame_count; i++) {
+		int buffer_width;
+		int buffer_height;
+		get_sprite_image_data (cpt->ui->sprite, i, &(cpt->reigon_data[i].bg_data), &buffer_width, &buffer_height);
+		cpt->reigon_data[i].img_data = malloc (sizeof (int) * buffer_width * buffer_height);
+		image_buffer_fill (cpt->reigon_data[i].img_data, buffer_width, buffer_height, 0x00000000);
+		cpt->reigon_data[i].img_width = buffer_width;
+		cpt->reigon_data[i].img_height = buffer_height;
+		cpt->reigon_data[i].valid = 0;
+		cpt->reigon_data[i].mouse_status = 0;
+	}
 	
 	//Set the event calls to NULL
 	cpt->click_event = NULL;
@@ -60,7 +58,24 @@ void gui_component_frame_event (game_object* obj) {
 }
 
 void gui_component_draw (game_object* obj) {
-	default_draw (obj);
+	
+	//Draw the frames
+	gui_component* cpt = (gui_component*)obj->object_data;
+	int i;
+	for (i = 0; i < cpt->num_reigons; i++) {
+		gui_reigon_data* rg = &(cpt->reigon_data[i]);
+		if (!rg->valid) {
+			if (cpt->render_func) {
+				cpt->render_func (cpt, i);
+			}
+			draw_to_sprite (obj->sprite, rg->bg_data, i, 0, 0, rg->img_width, rg->img_height);
+			draw_to_sprite (obj->sprite, rg->img_data, i, 0, 0, rg->img_width, rg->img_height);
+			rg->valid = 1;
+		}
+	}
+	
+	//Draw the GUI to the screen
+	draw_ignore_frames (obj);
 }
 
 void gui_component_hide (gui_component* cpt) {

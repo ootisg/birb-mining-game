@@ -1,14 +1,14 @@
 {
 "layout":[
 	{
-		"type":"rectangle",
+		"type":"rect",
 		"x":0.0f,
 		"y":0.0f,
 		"width":1.0f,
-		"height":0.11764f,
+		"height":0.11764f
 	},
 	{
-		"type":"rectangle",
+		"type":"rect",
 		"x":0.0f,
 		"y":0.11764f,
 		"width":1.0f,

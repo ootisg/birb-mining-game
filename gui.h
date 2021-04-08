@@ -4,16 +4,22 @@
 #include "game_object.h"
 
 struct gui_reigon_data {
+	unsigned char* bg_data;
 	unsigned char* img_data;
+	int img_width;
+	int img_height;
+	int valid;
 	int mouse_status;
 };
 
 struct gui_component {
 	game_object* ui;
+	void* ui_data;
 	layout_element* layout;
 	linked_list* reigons;
 	rectangle prev_bounds;
 	struct gui_reigon_data* reigon_data;
+	int num_reigons;
 	void (*click_event) (struct gui_component* cpt, int index, int button, float x, float y);
 	void (*hover_event) (struct gui_component* cpt, int index, float x, float y);
 	void (*mouse_enter_event) (struct gui_component* cpt, int index, float x, float y);

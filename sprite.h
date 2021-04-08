@@ -78,10 +78,16 @@ void sprite_fill_rect (sprite* spr, int color, int frame, float x, float y, floa
 
 /// I dunno man you're on your own for this one
 void img_copy (unsigned char* src, int src_width, int src_height, unsigned char* dest, int dest_width, int dest_height, int src_reigon_x, int src_reigon_y, int dest_reigon_x, int dest_reigon_y, int copy_width, int copy_height);
+void img_copy_masked (unsigned char* src, int src_width, int src_height, unsigned char* dest, int dest_width, int dest_height, int src_reigon_x, int src_reigon_y, int dest_reigon_x, int dest_reigon_y, int copy_width, int copy_height);
+
+void get_sprite_image_data (sprite* spr, int frame, unsigned char** buffer, int* width, int* height);
 
 unsigned char* text_get_char (char c);
 
 void sprite_draw_char (sprite* spr, int frame, float x, float y, char c);
+void image_buffer_draw_char (unsigned char* buffer, int buffer_width, int buffer_height, int x, int y, char c);
 void sprite_draw_string (sprite* spr, int frame, float x, float y, char* str);
+void image_buffer_draw_string (unsigned char* buffer, int buffer_width, int buffer_height, int x, int y, char* str);
+void image_buffer_fill (unsigned char* buffer, int buffer_width, int buffer_height, int color);
 
 #endif

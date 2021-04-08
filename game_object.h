@@ -102,6 +102,10 @@ void default_game_logic (game_object* obj);
 /// @param obj the game_object running this function
 void default_draw (game_object* obj);
 
+/// Draw function for a game_object which uses the full bounds of the sprite's source image data
+/// @param obj the game_object running this function
+void draw_ignore_frames (game_object* obj);
+
 /// The default hitbox generation function for game_object, which uses its x, y, width, and height
 /// @param obj the game_object whose hitbox will be initialized
 void generate_hitbox (game_object* obj);

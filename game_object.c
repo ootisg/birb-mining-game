@@ -138,3 +138,44 @@ void default_draw (game_object* obj) {
 		obj->vertex_data[23] = tex_id;
 	}
 }
+
+void draw_ignore_frames (game_object* obj) {
+	
+	if (obj->sprite) {
+		
+		//Get the object's position and sprite data
+		rectangle* r = &(obj->sprite->mapping->bounds);
+		unsigned int tex_id = obj->sprite->mapping->tex_id;
+		
+		//Update the object's vertex data
+		//Top-left
+		obj->vertex_data[0] = obj->x;
+		obj->vertex_data[1] = obj->y;
+		obj->vertex_data[2] = obj->depth;
+		obj->vertex_data[3] = r->x;
+		obj->vertex_data[4] = r->y;
+		obj->vertex_data[5] = tex_id;
+		//Bottom-left
+		obj->vertex_data[6] = obj->x;
+		obj->vertex_data[7] = obj->y + obj->height;
+		obj->vertex_data[8] = obj->depth;
+		obj->vertex_data[9] = r->x;
+		obj->vertex_data[10] = r->y + r->height;
+		obj->vertex_data[11] = tex_id;
+		//Bottom-right
+		obj->vertex_data[12] = obj->x + obj->width;
+		obj->vertex_data[13] = obj->y + obj->height;
+		obj->vertex_data[14] = obj->depth;
+		obj->vertex_data[15] = r->x + r->width;
+		obj->vertex_data[16] = r->y + r->height;
+		obj->vertex_data[17] = tex_id;
+		//Top-right
+		obj->vertex_data[18] = obj->x + obj->width;
+		obj->vertex_data[19] = obj->y;
+		obj->vertex_data[20] = obj->depth;
+		obj->vertex_data[21] = r->x + r->width;
+		obj->vertex_data[22] = r->y;
+		obj->vertex_data[23] = tex_id;
+	}
+	
+}

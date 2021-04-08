@@ -27,8 +27,8 @@ layout_element* make_layout_rec (layout_element* ptr, json_object* description) 
 				//Grid
 				float new_width = *((float*)(json_get_object (curr_obj, "width")->token_data));
 				float new_height = *((float*)(json_get_object (curr_obj, "height")->token_data));
-				for (float wy = parent_bounds->y; wy + new_height <= parent_bounds->y + parent_bounds->height + .00001; wy += new_height) {
-					for (float wx = parent_bounds->x; wx + new_width <= parent_bounds->x + parent_bounds->width + .00001; wx += new_width) {
+				for (float wy = 0; wy + new_height <= parent_bounds->y + parent_bounds->height + .00001; wy += new_height) {
+					for (float wx = 0; wx + new_width <= parent_bounds->x + parent_bounds->width + .00001; wx += new_width) {
 						//TODO find a better way to deal with floating point weirdnes
 						layout_element* new_layout = malloc (sizeof (layout_element));
 						scale_rectangle_from_attributes (&(new_layout->bounds), parent_bounds, wx, wy, new_width, new_height);
@@ -38,7 +38,7 @@ layout_element* make_layout_rec (layout_element* ptr, json_object* description) 
 					}
 				}
 			}
-			make_layout (malloc (sizeof (layout_element)), curr->node_data);
+			//make_layout (malloc (sizeof (layout_element)), curr->node_data);
 			curr = curr->next;
 		}
 	}

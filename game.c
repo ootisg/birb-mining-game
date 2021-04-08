@@ -16,8 +16,6 @@ void game_init () {
 	
 	//For now, THE ORDER IS IMPORTANT BECAUSE IT DETERMINES RENDER ORDER
 	//Make the inventory
-	json_object* params = read_json_file ("resources/config/inventory.json");
-	layout_element* layout = make_layout (malloc (sizeof (layout_element)), params);
 	inventory = malloc (sizeof (gui_component));
 	init_gui_component (inventory, "resources/config/inventory.json", make_rectangle (malloc (sizeof (rectangle)), 0, 0, 1, 1), "resources/sprites/inventory.png");
 	sprite_draw_string (inventory->ui->sprite, 0, 0, .11764f, "NOTHING TO SEE");
