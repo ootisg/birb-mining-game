@@ -9,8 +9,6 @@ void init_inventory () {
 	init_gui_component (inventory, "resources/config/inventory.json", make_rectangle (malloc (sizeof (rectangle)), 0, 0, 1, 1), "resources/sprites/inventory.png");
 	inventory->ui_data = make_linked_list (malloc (sizeof (linked_list)));
 	inventory->render_func = inventory_render_func;
-	//sprite_draw_string (inventory->ui->sprite, 0, 0, .11764f, "NOTHING TO SEE");
-	//sprite_draw_string (inventory->ui->sprite, 0, 0, .20588f, "HERE...");
 	gui_component_hide (inventory);
 }
 
@@ -45,7 +43,7 @@ int inventory_query (int id) {
 
 void inventory_render_func (gui_component* cpt, int index) {
 	if (index > 0) {
-		//image_buffer_fill (cpt->reigon_data[index].img_data, cpt->reigon_data->img_width, cpt->reigon_data->img_height, 0x00000000);
-		//image_buffer_draw_string (cpt->reigon_data[index].img_data, cpt->reigon_data->img_width, cpt->reigon_data->img_height, 0, 0, "ITEM SLOT");
+		image_buffer_fill (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 0x00000000);
+		image_buffer_draw_string (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 0, 0, "ITEM SLOT");
 	}
 }
