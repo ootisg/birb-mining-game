@@ -5,6 +5,7 @@
 #include "viewport.h"
 #include "tile_map.h"
 #include "gui.h"
+#include "game_ui.h"
 
 #include <stdio.h>
 
@@ -16,11 +17,8 @@ void game_init () {
 	
 	//For now, THE ORDER IS IMPORTANT BECAUSE IT DETERMINES RENDER ORDER
 	//Make the inventory
-	inventory = malloc (sizeof (gui_component));
-	init_gui_component (inventory, "resources/config/inventory.json", make_rectangle (malloc (sizeof (rectangle)), 0, 0, 1, 1), "resources/sprites/inventory.png");
-	sprite_draw_string (inventory->ui->sprite, 0, 0, .11764f, "NOTHING TO SEE");
-	sprite_draw_string (inventory->ui->sprite, 0, 0, .20588f, "HERE...");
-	gui_component_hide (inventory);
+	init_inventory ();
+	inventory = get_inventory ();
 	
 	//Make the birb
 	game_object* birb = make_birb ();
