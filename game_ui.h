@@ -5,7 +5,7 @@
 #include "linked_list.h"
 
 struct inventory_contents {
-	linked_list* inventory_contents;
+	int* items;
 };
 
 typedef struct inventory_contents inventory_contents;

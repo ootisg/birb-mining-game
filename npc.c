@@ -58,4 +58,5 @@ void free_npc (game_object* npc) {
 	//TODO different stuff
 	npc->x = -1;
 	npc->y = -1;
+	generate_hitbox (npc);
 }

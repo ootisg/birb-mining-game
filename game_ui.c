@@ -3,36 +3,60 @@
 #include "sprite.h"
 
 gui_component* inventory;
+json_object* item_data;
+char string_buffer[128];
+char* item_names[2];
 
 void init_inventory () {
+	
+	//Make the inventory gui component
 	inventory = malloc (sizeof (gui_component));
 	init_gui_component (inventory, "resources/config/inventory.json", make_rectangle (malloc (sizeof (rectangle)), 0, 0, 1, 1), "resources/sprites/inventory.png");
-	inventory->ui_data = make_linked_list (malloc (sizeof (linked_list)));
+	
+	//Allocate and fill the inventory data
+	inventory->ui_data = malloc (sizeof (inventory_contents));
+	((inventory_contents*)inventory->ui_data)->items = malloc (sizeof (int) * 2 * 10);
+	int i;
+	for (i = 0; i < 20; i++) {
+		((inventory_contents*)inventory->ui_data)->items[i] = -1;
+	}
+	
+	//Setup additional properties
 	inventory->render_func = inventory_render_func;
 	gui_component_hide (inventory);
+	//inventory_store_item (0);
+	item_data = read_json_file ("resources/config/items.json");
+	item_names[0] = "Coal";
+	item_names[1] = "Copper";
 }
 
 gui_component* get_inventory () {
 	return inventory;
 }
 
+void inventory_redraw_slot (int slot) {
+	gui_reigon_data* rg_data = &(inventory->reigon_data[slot + 1]); //Gets the reigon data for the correct inventory slot
+	rg_data->valid = 0;
+}
+
 int inventory_store_item (int id) {
-	linked_list_node* curr = ((linked_list*)inventory->ui_data)->head;
-	int index = 0;
-	int found = 0;
-	while (curr) {
-		int* id_amt_pair = curr->node_data;
-		if (id_amt_pair[0] == id) {
-			id_amt_pair[1]++;
+	int* contents = ((inventory_contents*)inventory->ui_data)->items;
+	int i;
+	for (i = 0; i < 10; i++) {
+		int idx = i * 2;
+		if (contents[idx] == id) {
+			contents[idx + 1]++;
+			inventory_redraw_slot (i);
+			return 1;
 		}
-		index++;
-		curr = curr->next;
+		if (contents [idx] == -1) {
+			contents [idx] = id;
+			contents [idx + 1] = 1;
+			inventory_redraw_slot (i);
+			return 1;
+		}
 	}
-	if (index <= 9) {
-		//There's room to add the item to the inventory
-		int* id_amt_pair = malloc (sizeof (int) * 2);
-		linked_list_add ((linked_list*)inventory->ui_data, id_amt_pair, 2);
-	}
+	return 0;
 }
 
 int inventory_remove_item (int id) {
@@ -42,8 +66,10 @@ int inventory_query (int id) {
 }
 
 void inventory_render_func (gui_component* cpt, int index) {
-	if (index > 0) {
+	int* items = ((inventory_contents*)inventory->ui_data)->items;
+	if (index > 0 && items[(index - 1) * 2] != -1) {
+		sprintf (&string_buffer[0], "%s x %d", item_names[items [(index - 1) * 2]], items [(index - 1) * 2 + 1]);
 		image_buffer_fill (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 0x00000000);
-		image_buffer_draw_string (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 0, 0, "ITEM SLOT");
+		image_buffer_draw_string (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 0, 0, &string_buffer[0]);
 	}
 }

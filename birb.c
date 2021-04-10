@@ -5,6 +5,7 @@
 #include "tile_map.h"
 #include "viewport.h"
 #include "npc.h"
+#include "game_ui.h"
 
 #define BREAK_ANIM_FRAMES 4
 #define MINE_NUM_FRAMES 4
@@ -14,6 +15,7 @@
 sprite* birb_sprite = NULL;
 sprite* anim_sprite = NULL;
 sprite* items_sprite = NULL;
+linked_list* dropped_items = NULL;
 
 struct birb_data {
 	int move_time;
@@ -82,9 +84,15 @@ void init_birb (game_object* obj) {
 	//Setup the break animation
 	obj_data->brk_anim = make_break_anim ();
 	
+	//Setup the hitbox
+	generate_hitbox (obj);
+	
 	//Set the birb sprite and animation speed
 	obj->sprite = birb_sprite;
 	animation_handler_set_properties (&(obj->animator), ANIMATION_HANDLER_STILL_FRAME, 1);
+	
+	//Setup the dropped items list
+	dropped_items = make_linked_list (malloc (sizeof (linked_list)));
 	
 }
 
@@ -114,6 +122,8 @@ void spawn_ore_drops (map_tile* tile) {
 		curr->y = drop_y + yoffs;
 		curr->width = MAP_TILE_SIZE / 4;
 		curr->height = MAP_TILE_SIZE / 4;
+		curr->object_data = (void*)drop_type;
+		generate_hitbox (curr);
 		//Setup the item drop's sprite
 		curr->sprite = items_sprite;
 		animation_handler_set_properties (&(curr->animator), ANIMATION_HANDLER_STILL_FRAME, 1);
@@ -362,6 +372,24 @@ void birb_logic (game_object* obj) {
 			}
 		}
 	}
+	
+	//Update the hitbox
+	generate_hitbox (obj);
+	
+	//Check for collision with items
+	linked_list* colliding_objs = game_object_get_colliding (get_global_object_handler (), obj, "NPC");
+	linked_list_node* curr = colliding_objs->head;
+	while (curr) {
+		if (((game_object*)curr->node_data)->x > 0) {
+			//wtf, why does this check need to be here?
+			int item_id = (int)(((game_object*)curr->node_data)->object_data);
+			inventory_store_item (item_id);
+			free_npc (curr->node_data);
+		}
+		curr = curr->next;
+	}
+	free_linked_list_elements (colliding_objs, NULL);
+	free (colliding_objs);
 	
 	update_viewport ();
 	update_tile_objs ();
