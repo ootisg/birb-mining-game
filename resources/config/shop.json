@@ -1,0 +1,25 @@
+{
+"layout":[
+	{
+		"type":"rect",
+		"x":0.0f,
+		"y":0.0f,
+		"width":1.0f,
+		"height":0.11764f
+	},
+	{
+		"type":"rect",
+		"x":0.0f,
+		"y":0.11764f,
+		"width":1.0f,
+		"height":0.88236f,
+		"layout": [
+			{
+				"type":"grid",
+				"width":0.5f,
+				"height":0.5f
+			}
+		]
+	}
+]
+}

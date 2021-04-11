@@ -70,6 +70,6 @@ void inventory_render_func (gui_component* cpt, int index) {
 	if (index > 0 && items[(index - 1) * 2] != -1) {
 		sprintf (&string_buffer[0], "%s x %d", item_names[items [(index - 1) * 2]], items [(index - 1) * 2 + 1]);
 		image_buffer_fill (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 0x00000000);
-		image_buffer_draw_string (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 0, 0, &string_buffer[0]);
+		image_buffer_draw_string (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 2, 0, &string_buffer[0]);
 	}
 }
