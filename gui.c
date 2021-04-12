@@ -55,6 +55,19 @@ void gui_component_init (game_object* obj) {
 
 void gui_component_frame_event (game_object* obj) {
 	
+	//Get the inputs
+	input_state* inputs = get_inputs ();
+	
+	//Check mouse inputs
+	gui_component* cpt = (gui_component*)obj->object_data;
+	linked_list* bounds_list = cpt->reigons; //Bounds list may not be initialized
+	/*linked_list_node* curr = bounds_list->head;
+	while (curr) {
+		printf ("REIGON\n");
+		print_rectangle ((rectangle*)curr->node_data);
+		curr = curr->next;
+	}*/
+	
 }
 
 void gui_component_draw (game_object* obj) {

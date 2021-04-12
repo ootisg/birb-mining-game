@@ -12,13 +12,16 @@
 point scratch_pt;
 
 gui_component* inventory;
+gui_component* shop;
 
 void game_init () {
 	
 	//For now, THE ORDER IS IMPORTANT BECAUSE IT DETERMINES RENDER ORDER
-	//Make the inventory
+	//Make the inventory and the shop
 	init_inventory ();
+	init_shop ();
 	inventory = get_inventory ();
+	shop = get_shop ();
 	
 	//Make the birb
 	game_object* birb = make_birb ();
@@ -36,12 +39,24 @@ void game_init () {
 
 void game_logic_loop () {
 	
+	//Get the inputs
 	input_state* inputs = get_inputs ();
+	
+	//Handle toggling the inventory
 	if (inputs->keys_pressed['e']) {
-		if (inventory->ui->x == -1) {
+		if (inventory->ui->x == -1 && shop->ui->x == -1) {
 			gui_component_show (inventory);
-		} else {
+		} else if (inventory->ui->x != -1) {
 			gui_component_hide (inventory);
+		}
+	}
+	
+	//Handle toggling the shop (TODO change how the shop is accessed ingame)
+	if (inputs->keys_pressed['q']) {
+		if (shop->ui->x == -1 && inventory->ui->x == -1) {
+			gui_component_show (shop);
+		} else if (shop->ui->x != -1) {
+			gui_component_hide (shop);
 		}
 	}
 	

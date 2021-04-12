@@ -2,6 +2,8 @@
 
 #include "sprite.h"
 
+//------------------- Inventory ----------------------
+
 gui_component* inventory;
 json_object* item_data;
 char string_buffer[128];
@@ -72,4 +74,44 @@ void inventory_render_func (gui_component* cpt, int index) {
 		image_buffer_fill (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 0x00000000);
 		image_buffer_draw_string (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 2, 0, &string_buffer[0]);
 	}
+}
+
+//------------------- Shop ----------------------
+
+gui_component* shop;
+
+void init_shop () {
+	
+	//Make the shop gui component
+	shop = malloc (sizeof (gui_component));
+	init_gui_component (shop, "resources/config/shop.json", make_rectangle (malloc (sizeof (rectangle)), 0, 0, 1, 1), "resources/sprites/shop.png");
+	
+	//Allocate and setup the shop's data
+	shop_contents* contents = malloc (sizeof (shop_contents));
+	shop->ui_data = contents;
+	contents->slot_a_data = 0;
+	contents->slot_b_data = 0;
+	contents->slot_c_data = 0;
+	contents->slot_d_data = 0;
+	
+	//Setup additional properties
+	shop->render_func = shop_render_func;
+	gui_component_hide (shop);
+	
+}
+
+gui_component* get_shop () {
+	
+	//Nothing special here
+	return shop;
+	
+}
+
+void shop_render_func (gui_component* cpt, int index) {
+	
+	//No rendering for now
+	if (index > 0) {
+		image_buffer_fill (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 0x00000000);
+	}
+	
 }
