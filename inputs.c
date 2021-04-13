@@ -122,10 +122,10 @@ void process_inputs (input_state* state) {
 			}
 		}
 		if (ev->event_type == INPUT_EVENT_TYPE_MOUSE_DRAG) {
-			//Do nothing
+			state->mouse_was_dragged = 1;
 		}
 		if (ev->event_type == INPUT_EVENT_TYPE_MOUSE_MOVE) {
-			//Do nothing
+			state->mouse_was_moved = 1;
 		}
 		if (i == state->num_mouse_events - 1) {
 			//Mouse coords only need to be updated on the last event

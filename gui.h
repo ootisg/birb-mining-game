@@ -24,7 +24,7 @@ struct gui_component {
 	void (*hover_event) (struct gui_component* cpt, int index, float x, float y);
 	void (*mouse_enter_event) (struct gui_component* cpt, int index, float x, float y);
 	void (*mouse_exit_event) (struct gui_component* cpt, int index, float x, float y);
-	void (*key_event) (struct gui_component* cpt, int index);
+	void (*key_event) (struct gui_component* cpt, int index, char key);
 	void (*reigon_init_func) (struct gui_component* cpt, int index);
 	void (*render_func) (struct gui_component* cpt, int index);
 };

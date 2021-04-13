@@ -6,11 +6,12 @@
 
 //------------------- Inventory ----------------------
 
-struct inventory_contents {
+struct inventory_data {
 	int* items;
+	int selected_index;
 };
 
-typedef struct inventory_contents inventory_contents;
+typedef struct inventory_data inventory_data;
 
 void init_inventory ();
 gui_component* get_inventory ();
@@ -18,6 +19,8 @@ int inventory_store_item (int id);
 int inventory_remove_item (int id);
 int inventory_query (int id);
 void inventory_render_func (gui_component* cpt, int index);
+void inventory_mouse_enter_func (struct gui_component* cpt, int index, float x, float y);
+void inventory_mouse_exit_func (struct gui_component* cpt, int index, float x, float y);
 
 //------------------- Shop ----------------------
 
@@ -26,17 +29,20 @@ void inventory_render_func (gui_component* cpt, int index);
 // Slot 2 contains misc. upgrades
 // Slot 3 contains blueprints
 // Slot 4 contains a (shuffled) resource
-struct shop_contents {
+struct shop_data {
 	int slot_a_data;
 	int slot_b_data;
 	int slot_c_data;
 	int slot_d_data;
+	int selected_index;
 };
 
-typedef struct shop_contents shop_contents;
+typedef struct shop_data shop_data;
 
 void init_shop ();
 gui_component* get_shop ();
 void shop_render_func (gui_component* cpt, int index);
+void shop_mouse_enter_func (struct gui_component* cpt, int index, float x, float y);
+void shop_mouse_exit_func (struct gui_component* cpt, int index, float x, float y);
 
 #endif
