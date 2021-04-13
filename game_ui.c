@@ -31,8 +31,12 @@ void init_inventory () {
 	gui_component_hide (inventory);
 	//inventory_store_item (0);
 	item_data = read_json_file ("resources/config/items.json");
+	//TODO temporary solution
 	item_names[0] = "Coal";
 	item_names[1] = "Copper";
+	item_names[2] = "Gold";
+	item_names[3] = "Ruby";
+	
 }
 
 gui_component* get_inventory () {

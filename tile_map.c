@@ -77,6 +77,13 @@ void init_map_tiles () {
 
 void generate_tile (map_tile* tile) {
 	
+	int (*gen_func) (int x, int y, int seed1, float seed2) = get_biome (tile);
+	tile->id = gen_func (tile->x, tile->y, seed_1, seed_2);
+	
+}
+
+void* get_biome (map_tile* tile) {
+	
 	//Get the coords
 	int wx = tile->x;
 	int wy = tile->y;
@@ -89,17 +96,17 @@ void generate_tile (map_tile* tile) {
 	int diff_y = wy - center_y;
 	float distsqr = diff_x * diff_x + diff_y * diff_y;
 	if (distsqr < radius * radius) {
-		tile->id = biome_forest (wx, wy, seed_1, seed_2);
-		return;
+		return biome_forest;
 	}
 	
-	//Decide the biome
+	//Generate the raw random for the biome
 	float biomegen = stb_perlin_noise3_seed((float)wx / 32 + .5, (float)wy / 32 + .5, seed_2 + 2.0f, 0, 0, 0, seed_1);
-	//Generate the tile
+	
+	//Determine the biome generator
 	if (biomegen > 0) {
-		tile->id = biome_forest (wx, wy, seed_1, seed_2);
+		return biome_forest;
 	} else {
-		tile->id = biome_cyanocomb (wx, wy, seed_1, seed_2);
+		return biome_cyanocomb;
 	}
 	
 }

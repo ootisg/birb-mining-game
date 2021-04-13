@@ -80,6 +80,7 @@ void init_birb (game_object* obj) {
 	//Setup the drill
 	obj_data->drill = make_hash_table (malloc (sizeof (hash_table)));
 	hash_table_put (obj_data->drill, "soil", 4, &(obj_data->drill));
+	hash_table_put (obj_data->drill, "stone", 5, &(obj_data->drill)); //TODO very temporary
 	obj_data->drill_strength = 0.2f;
 	//Setup the break animation
 	obj_data->brk_anim = make_break_anim ();
@@ -141,6 +142,7 @@ void break_tile (game_object* obj, int x, int y) {
 	
 	//Do the block mining
 	if (t->tile_obj) {
+		printf ("%s, %x\n", material, hash_table_get (obj_data->drill, material, strlen (material)));
 		if (hash_table_get (obj_data->drill, material, strlen (material))) {
 			//Block can be mined
 			if (brk_data->tile != t) {
@@ -164,7 +166,12 @@ void break_tile (game_object* obj, int x, int y) {
 					if (!strcmp (tile_type, "ore")) {
 						spawn_ore_drops (t);
 					}
-					t->id = rand () > RAND_MAX / 2 ? tile_id_by_name ("bg_1") : tile_id_by_name ("bg_2");
+					void* biome = get_biome (t);
+					if (biome == biome_forest) {
+						t->id = rand () > RAND_MAX / 2 ? tile_id_by_name ("bg_1") : tile_id_by_name ("bg_2");
+					} else {
+						t->id = rand () > RAND_MAX / 2 ? tile_id_by_name ("bg_bluestone_1") : tile_id_by_name ("bg_bluestone_2");
+					}
 					obj_data->brk_anim->x = -1;
 					obj_data->brk_anim->y = -1;
 					brk_data->tile = NULL;

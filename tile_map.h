@@ -38,6 +38,10 @@ void init_map_tiles ();
 /// @param tile the tile to generate
 void generate_tile (map_tile* tile);
 
+/// Gets the biome at the given tile.
+/// @param the tile to check
+void* get_biome (map_tile* tile);
+
 /// Gets the map as a tile grid.
 /// 	the tile [x, y] is located at index y * MAP_GRID_WIDTH + x
 /// @return the tile grid

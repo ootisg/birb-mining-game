@@ -55,14 +55,15 @@
 	"11": {
 		"name":"stone_1",
 		"type":"regular",
-		"material":"stone",
+		"material":"very_hard",
 		"hardness":30
 	},
 	"12": {
 		"name":"gold_1",
 		"type":"ore",
 		"material":"stone",
-		"hardness":45
+		"hardness":45,
+		"drop":2
 	},
 	"14": {
 		"name":"pipe_horizontal",
@@ -85,14 +86,15 @@
 	"19": {
 		"name":"stone_2",
 		"type":"regular",
-		"material":"stone",
+		"material":"very_hard",
 		"hardness":30
 	},
 	"20": {
 		"name":"ruby_1",
 		"type":"ore",
 		"material":"stone",
-		"hardness":55
+		"hardness":55,
+		"drop":3
 	},
 	"22": {
 		"name":"pipe_r_u",
