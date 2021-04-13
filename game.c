@@ -11,8 +11,8 @@
 
 point scratch_pt;
 
-gui_component* inventory;
-gui_component* shop;
+gui_component* gm_inventory;
+gui_component* gm_shop;
 
 void game_init () {
 	
@@ -20,8 +20,8 @@ void game_init () {
 	//Make the inventory and the shop
 	init_inventory ();
 	init_shop ();
-	inventory = get_inventory ();
-	shop = get_shop ();
+	gm_inventory = get_inventory ();
+	gm_shop = get_shop ();
 	
 	//Make the birb
 	game_object* birb = make_birb ();
@@ -44,19 +44,19 @@ void game_logic_loop () {
 	
 	//Handle toggling the inventory
 	if (inputs->keys_pressed['e']) {
-		if (inventory->ui->x == -1 && shop->ui->x == -1) {
-			gui_component_show (inventory);
-		} else if (inventory->ui->x != -1) {
-			gui_component_hide (inventory);
+		if (gm_inventory->ui->x == -1 && gm_shop->ui->x == -1) {
+			gui_component_show (gm_inventory);
+		} else if (gm_inventory->ui->x != -1) {
+			gui_component_hide (gm_inventory);
 		}
 	}
 	
 	//Handle toggling the shop (TODO change how the shop is accessed ingame)
 	if (inputs->keys_pressed['q']) {
-		if (shop->ui->x == -1 && inventory->ui->x == -1) {
-			gui_component_show (shop);
-		} else if (shop->ui->x != -1) {
-			gui_component_hide (shop);
+		if (gm_shop->ui->x == -1 && gm_inventory->ui->x == -1) {
+			gui_component_show (gm_shop);
+		} else if (gm_shop->ui->x != -1) {
+			gui_component_hide (gm_shop);
 		}
 	}
 	
