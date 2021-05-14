@@ -19,6 +19,7 @@ void game_init () {
 	//For now, THE ORDER IS IMPORTANT BECAUSE IT DETERMINES RENDER ORDER
 	//Make the inventory and the shop
 	init_inventory ();
+	printf ("INVENTORY PTR: %x\n", get_inventory ());
 	init_shop ();
 	gm_inventory = get_inventory ();
 	gm_shop = get_shop ();

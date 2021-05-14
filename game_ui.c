@@ -7,10 +7,9 @@
 gui_component* inventory;
 json_object* item_data;
 char string_buffer[128];
-char* item_names[2];
+char* item_names[256];
 
 void init_inventory () {
-	
 	//Make the inventory gui component
 	inventory = malloc (sizeof (gui_component));
 	init_gui_component (inventory, "resources/config/inventory.json", make_rectangle (malloc (sizeof (rectangle)), 0, 0, 1, 1), "resources/sprites/inventory.png");
