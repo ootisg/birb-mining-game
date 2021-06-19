@@ -109,7 +109,7 @@ void gui_component_frame_event (game_object* obj) {
 				if (cpt->click_event) {
 					int i = 0;
 					for (i = 0; i < 4; i++) {
-						if (inputs->mouse_buttons_down[i]) {
+						if (inputs->mouse_buttons_clicked[i]) {
 							cpt->click_event (cpt, index, i, cpt_mouse_x, cpt_mouse_y);
 						}
 					}

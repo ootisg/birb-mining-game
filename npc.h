@@ -10,11 +10,18 @@ struct npc_slot {
 	int persistent;
 };
 
+struct npc_data {
+	char* npc_type;
+	void* data;
+};
+
 typedef struct npc_slot npc_slot;
+typedef struct npc_data npc_data;
 
 void init_npcs ();
 void init_npc_slot (void* slot);
 game_object* alloc_npc (int persistent);
 void free_npc (game_object* npc);
+npc_data* make_npc_data (void* ptr, char* type, void* data);
 
 #endif

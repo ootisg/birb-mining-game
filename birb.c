@@ -123,7 +123,7 @@ void spawn_ore_drops (map_tile* tile) {
 		curr->y = drop_y + yoffs;
 		curr->width = MAP_TILE_SIZE / 4;
 		curr->height = MAP_TILE_SIZE / 4;
-		curr->object_data = (void*)drop_type;
+		curr->object_data = make_npc_data (malloc (sizeof (npc_data)), "item_drop", (void*)drop_type);
 		generate_hitbox (curr);
 		//Setup the item drop's sprite
 		curr->sprite = items_sprite;
@@ -389,9 +389,15 @@ void birb_logic (game_object* obj) {
 	while (curr) {
 		if (((game_object*)curr->node_data)->x > 0) {
 			//wtf, why does this check need to be here?
-			int item_id = (int)(((game_object*)curr->node_data)->object_data);
-			inventory_store_item (item_id);
-			free_npc (curr->node_data);
+			//The one directly below, however, makes perfect sense
+			if (!strcmp((char*)((npc_data*)(((game_object*)curr->node_data)->object_data))->npc_type, "item_drop")) {
+				int item_id = (int)((npc_data*)(((game_object*)curr->node_data)->object_data))->data;
+				inventory_store_item (item_id);
+				free_npc (curr->node_data);
+			}
+			if (!strcmp((char*)((npc_data*)(((game_object*)curr->node_data)->object_data))->npc_type, "shop")) {
+				open_shop ();
+			}
 		}
 		curr = curr->next;
 	}

@@ -330,7 +330,7 @@ void display () {
 	//Prepare to accept new inputs
 	swap_input_buffers ();
 	//Wait for target FPS
-	printf ("frame %d: %d ms\n", fcount, glutGet (GLUT_ELAPSED_TIME) - frame_start_time);
+	//printf ("frame %d: %d ms\n", fcount, glutGet (GLUT_ELAPSED_TIME) - frame_start_time);
 	int time_diff = glutGet (GLUT_ELAPSED_TIME) - frame_start_time;
 	fcount++;
 	if (time_diff >= 17) {
