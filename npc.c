@@ -60,3 +60,8 @@ void free_npc (game_object* npc) {
 	npc->y = -1;
 	generate_hitbox (npc);
 }
+
+npc_data* make_npc_data (void* ptr, char* type, void* data) {
+	((npc_data*)ptr)->npc_type = type;
+	((npc_data*)ptr)->data = data;
+}

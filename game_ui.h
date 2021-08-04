@@ -44,5 +44,6 @@ gui_component* get_shop ();
 void shop_render_func (gui_component* cpt, int index);
 void shop_mouse_enter_func (struct gui_component* cpt, int index, float x, float y);
 void shop_mouse_exit_func (struct gui_component* cpt, int index, float x, float y);
+void shop_click_func (struct gui_component* cpt, int index, int button, float x, float y);
 
 #endif

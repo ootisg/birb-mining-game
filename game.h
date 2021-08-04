@@ -13,4 +13,10 @@ void game_logic_loop ();
 /// @param obj the game_object being drawn
 void viewport_draw (game_object* obj);
 
+//Toggles the opened menu
+void toggle_menu ();
+
+//Opens the shop menu
+void open_shop ();
+
 #endif

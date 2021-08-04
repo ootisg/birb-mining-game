@@ -140,6 +140,7 @@ void init_shop () {
 	shop->render_func = shop_render_func;
 	shop->mouse_enter_event = shop_mouse_enter_func;
 	shop->mouse_exit_event = shop_mouse_exit_func;
+	shop->click_event = shop_click_func;
 	gui_component_hide (shop);
 	
 }
@@ -186,5 +187,11 @@ void shop_mouse_exit_func (struct gui_component* cpt, int index, float x, float 
 		}
 		(&(shop->reigon_data[index]))->valid = 0;
 	}
+	
+}
+
+void shop_click_func (struct gui_component* cpt, int index, int button, float x, float y) {
+	
+	printf ("INDEX IS %d\n", index);
 	
 }
