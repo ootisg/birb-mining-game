@@ -267,8 +267,10 @@ int do_move (game_object* obj) {
 void reveal_around_birb (game_object* obj) {
 	int tile_x = obj->x / MAP_TILE_SIZE;
 	int tile_y = obj->y / MAP_TILE_SIZE;
-	for (int ix = -BIRB_REVEAL_RADIUS; ix <= BIRB_REVEAL_RADIUS; ix++) {
-		for (int iy = -BIRB_REVEAL_RADIUS; iy <= BIRB_REVEAL_RADIUS; iy++) {
+	int ix;
+	int iy;
+	for (ix = -BIRB_REVEAL_RADIUS; ix <= BIRB_REVEAL_RADIUS; ix++) {
+		for (iy = -BIRB_REVEAL_RADIUS; iy <= BIRB_REVEAL_RADIUS; iy++) {
 			int wx = tile_x + ix;
 			int wy = tile_y + iy;
 			if ((ix == -BIRB_REVEAL_RADIUS || ix == BIRB_REVEAL_RADIUS) && (iy == -BIRB_REVEAL_RADIUS || iy == BIRB_REVEAL_RADIUS)) {
