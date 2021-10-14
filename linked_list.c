@@ -143,12 +143,4 @@ void free_linked_list_elements (linked_list* list, void* data_callback) {
 		}
 		free (prev);
 	}
-	//Free the last element of the list (unsure if this ever runs, TODO check on that)
-	if (prev) {
-		if (data_callback) {
-			//Free the data stored in this node
-			foo (prev->node_data);
-		}
-		free (prev);
-	}
 }
