@@ -280,7 +280,7 @@ void render () {
     glUniform1i(g_resources.uniforms.texture, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, g_resources.vertex_buffer);
 	GLuint stride_len = sizeof(GLfloat) * 6;
-	GLuint offset = 0;
+	size_t offset = 0;
 	//Map the position
     glVertexAttribPointer(
         g_resources.attributes.position,  // attribute
@@ -288,7 +288,7 @@ void render () {
         GL_FLOAT,                         // type 
         GL_FALSE,                         // normalized? 
         stride_len,                       // stride 
-        (void*)offset                     // array buffer offset 
+        (void*)offset                     // array buffer offset
     );
 	glEnableVertexAttribArray(g_resources.attributes.position);
 	//Map the texture coordinates

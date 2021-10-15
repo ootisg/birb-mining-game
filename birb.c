@@ -105,7 +105,7 @@ void spawn_ore_drops (map_tile* tile) {
 	}
 	
 	//Get the ore properties
-	int drop_type = *((int*)get_tile_property (tile->id, "drop"));
+	size_t drop_type = *((int*)get_tile_property (tile->id, "drop"));
 	
 	//Get the x and y coords to drop at
 	float drop_x = tile->x * MAP_TILE_SIZE;
@@ -393,7 +393,7 @@ void birb_logic (game_object* obj) {
 			//wtf, why does this check need to be here?
 			//The one directly below, however, makes perfect sense
 			if (!strcmp((char*)((npc_data*)(((game_object*)curr->node_data)->object_data))->npc_type, "item_drop")) {
-				int item_id = (int)((npc_data*)(((game_object*)curr->node_data)->object_data))->data;
+				int item_id = (size_t)((npc_data*)(((game_object*)curr->node_data)->object_data))->data;
 				inventory_store_item (item_id);
 				free_npc (curr->node_data);
 			}
