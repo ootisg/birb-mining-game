@@ -18,7 +18,7 @@ struct npc_data {
 typedef struct npc_slot npc_slot;
 typedef struct npc_data npc_data;
 
-void init_npcs ();
+void init_npc_handler ();
 void init_npc_slot (void* slot);
 game_object* alloc_npc (int persistent);
 void free_npc (game_object* npc);

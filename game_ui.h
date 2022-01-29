@@ -2,6 +2,8 @@
 #define GAME_UI_H
 
 #include "gui.h"
+#include "npc.h"
+#include "tile_map.h"
 #include "linked_list.h"
 
 //------------------- Inventory ----------------------
@@ -39,11 +41,19 @@ struct shop_data {
 
 typedef struct shop_data shop_data;
 
-void init_shop ();
-gui_component* get_shop ();
+void init_shop_gui ();
+void init_shop_npc (double x, double y);
+gui_component* get_shop_gui ();
 void shop_render_func (gui_component* cpt, int index);
 void shop_mouse_enter_func (struct gui_component* cpt, int index, float x, float y);
 void shop_mouse_exit_func (struct gui_component* cpt, int index, float x, float y);
 void shop_click_func (struct gui_component* cpt, int index, int button, float x, float y);
+game_object* get_shop_npc ();
+
+//Toggles the opened menu
+void toggle_menu ();
+
+//Opens the shop menu
+void open_shop ();
 
 #endif
