@@ -122,7 +122,10 @@ void inventory_mouse_exit_func (struct gui_component* cpt, int index, float x, f
 
 gui_component* shop;
 
-void init_shop () {
+sprite* shop_birb_sprite;
+game_object* shop_birb;
+
+void init_shop_gui () {
 	
 	//Make the shop gui component
 	shop = malloc (sizeof (gui_component));
@@ -145,10 +148,39 @@ void init_shop () {
 	
 }
 
-gui_component* get_shop () {
+void init_shop_npc (double x, double y) {
+	
+	//Make the shop NPC and setup its properties
+	shop_birb_sprite = make_sprite ("resources/sprites/shoppy_birb.png");
+	shop_birb = alloc_npc (1);
+	shop_birb->x = x;
+	shop_birb->y = y;
+	shop_birb->width = MAP_TILE_SIZE * 2;
+	shop_birb->height = MAP_TILE_SIZE * 3;
+	shop_birb->object_data = make_npc_data (malloc (sizeof (npc_data)), "shop", (void*)0);
+	shop_birb->sprite = shop_birb_sprite;
+	generate_hitbox (shop_birb);
+	
+}
+
+gui_component* get_shop_gui () {
 	
 	//Nothing special here
 	return shop;
+	
+}
+
+game_object* get_shop_npc () {
+	
+	//Nothing special here
+	return shop_birb;
+	
+}
+
+void open_shop_gui () {
+	
+	//Just show the shop UI
+	gui_component_show (shop);
 	
 }
 
@@ -193,5 +225,20 @@ void shop_mouse_exit_func (struct gui_component* cpt, int index, float x, float 
 void shop_click_func (struct gui_component* cpt, int index, int button, float x, float y) {
 	
 	printf ("INDEX IS %d\n", index);
+	
+}
+
+//------------------- Misc. ----------------------
+
+void toggle_menu () {
+	
+	//Toggles the menu open/closed depending on which one should be used
+	if (inventory->ui->x == -1 && shop->ui->x == -1) {
+		gui_component_show (inventory);
+	} else if (inventory->ui->x != -1) {
+		gui_component_hide (inventory);
+	} else if (shop->ui->x != -1) {
+		gui_component_hide (shop);
+	}
 	
 }

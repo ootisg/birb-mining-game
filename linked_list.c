@@ -143,4 +143,5 @@ void free_linked_list_elements (linked_list* list, void* data_callback) {
 		}
 		free (prev);
 	}
+	
 }

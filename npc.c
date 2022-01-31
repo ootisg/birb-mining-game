@@ -8,7 +8,7 @@ int buffer_pos;
 #include "tile_map.h"
 #include "game.h"
 
-void init_npcs () {
+void init_npc_handler () {
 	
 	//Initialize the buffer
 	npcs = malloc (sizeof (npc_slot) * MAX_NPCS);

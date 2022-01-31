@@ -11,38 +11,19 @@
 
 point scratch_pt;
 
-gui_component* gm_inventory;
-gui_component* gm_shop;
-
-sprite* shop_birb_sprite;
-
-game_object* shop_birb;
-
 void game_init () {
 	
 	//For now, THE ORDER IS IMPORTANT BECAUSE IT DETERMINES RENDER ORDER
 	//Make the inventory and the shop
 	init_inventory ();
-	printf ("INVENTORY PTR: %x\n", get_inventory ());
-	init_shop ();
-	gm_inventory = get_inventory ();
-	gm_shop = get_shop ();
+	init_shop_gui ();
 	
 	//Make the birb
 	game_object* birb = make_birb ();
 	
-	//Initialize the NPC
-	init_npcs ();
-	//Initialize the shop NPCS
-	shop_birb_sprite = make_sprite ("resources/sprites/shoppy_birb.png");
-	shop_birb = alloc_npc (1);
-	shop_birb->x = birb->x + .5;
-	shop_birb->y = birb->y;
-	shop_birb->width = MAP_TILE_SIZE * 2;
-	shop_birb->height = MAP_TILE_SIZE * 3;
-	shop_birb->object_data = make_npc_data (malloc (sizeof (npc_data)), "shop", (void*)0);
-	shop_birb->sprite = shop_birb_sprite;
-	generate_hitbox (shop_birb);
+	//Initialize the NPC handler and various NPCss
+	init_npc_handler ();
+	init_shop_npc (birb->x + .5, birb->y);
 	
 	//Initialize the map tiles
 	init_map_tiles ();
@@ -80,18 +61,4 @@ void viewport_draw (game_object* obj) {
 	obj->x = orig_x;
 	obj->y = orig_y;
 	
-}
-
-void open_shop () {
-	gui_component_show (gm_shop);
-}
-
-void toggle_menu () {
-	if (gm_inventory->ui->x == -1 && gm_shop->ui->x == -1) {
-		gui_component_show (gm_inventory);
-	} else if (gm_inventory->ui->x != -1) {
-		gui_component_hide (gm_inventory);
-	} else if (gm_shop->ui->x != -1) {
-		gui_component_hide (gm_shop);
-	}
 }

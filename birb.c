@@ -398,7 +398,7 @@ void birb_logic (game_object* obj) {
 				free_npc (curr->node_data);
 			}
 			if (!strcmp((char*)((npc_data*)(((game_object*)curr->node_data)->object_data))->npc_type, "shop")) {
-				open_shop ();
+				open_shop_gui ();
 			}
 		}
 		curr = curr->next;
