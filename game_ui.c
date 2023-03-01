@@ -2,6 +2,8 @@
 
 #include "sprite.h"
 
+#include "lodepng.h"
+
 //------------------- Inventory ----------------------
 
 gui_component* inventory;
@@ -125,6 +127,18 @@ gui_component* shop;
 sprite* shop_birb_sprite;
 game_object* shop_birb;
 
+shop_slot_buffer shop_slots[4];
+
+void load_shop_slot (int slot) {
+	//Decode the chars file
+	shop_slot_buffer curr = shop_slots[slot];
+	int width, height;
+	unsigned char* img_loc;
+	lodepng_decode32_file (&img_loc, &width, &height, "resources/sprites/shop_icons/beak_1.png");
+	shop_slots[0].image = img_loc;
+	shop_slots[0].is_loaded = 1;
+}
+
 void init_shop_gui () {
 	
 	//Make the shop gui component
@@ -145,6 +159,12 @@ void init_shop_gui () {
 	shop->mouse_exit_event = shop_mouse_exit_func;
 	shop->click_event = shop_click_func;
 	gui_component_hide (shop);
+	
+	//Load shop slots
+	load_shop_slot (0);
+	load_shop_slot (1);
+	load_shop_slot (2);
+	load_shop_slot (3);
 	
 }
 
@@ -191,12 +211,16 @@ void shop_render_func (gui_component* cpt, int index) {
 	
 	//Render the menu selection
 	if (index > 0) {
+		//Render the menu selection
 		if (shop_dat->selected_index == index) {
 			image_buffer_fill (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 0xFF777777);
 		} else {
 			image_buffer_fill (cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 0x00000000);
 		}
+		//Render the shop item
+		img_copy_masked (shop_slots[0].image, 157, 118, cpt->reigon_data[index].img_data, cpt->reigon_data[index].img_width, cpt->reigon_data[index].img_height, 0, 0, 0, 0, 157, 118);
 	}
+	
 	
 }
 
@@ -228,13 +252,81 @@ void shop_click_func (struct gui_component* cpt, int index, int button, float x,
 	
 }
 
+//----------------- Shop Bar ---------------------
+
+gui_component* shop_bottom_bar;
+
+void init_shop_bar_gui () {
+	
+	//Make the shop gui component
+	shop_bottom_bar = malloc (sizeof (gui_component));
+	init_gui_component (shop_bottom_bar, "resources/config/shop_bottom_bar.json", make_rectangle (malloc (sizeof (rectangle)), 0, 0, 1, 1), "resources/sprites/shop_bottom_bar.png");
+	
+	//Allocate and setup the shop's data
+	int* selected_index = malloc (sizeof (int));
+	shop_bottom_bar->ui_data = selected_index;
+	
+	//Setup additional properties
+	shop_bottom_bar->render_func = shop_bar_render_func;
+	shop_bottom_bar->mouse_enter_event = shop_bar_mouse_enter_func;
+	shop_bottom_bar->mouse_exit_event = shop_bar_mouse_exit_func;
+	shop_bottom_bar->click_event = shop_bar_click_func;
+	gui_component_hide (shop_bottom_bar);
+	
+}
+
+gui_component* get_shop_bar_gui () {
+	
+	//Nothing special here
+	return shop_bottom_bar;
+	
+}
+
+void open_shop_bar_gui () {
+	
+	//Just show the shop UI
+	gui_component_show (shop_bottom_bar);
+	
+}
+
+void shop_bar_render_func (gui_component* cpt, int index) {
+	
+	
+}
+
+void shop_bar_mouse_enter_func (struct gui_component* cpt, int index, float x, float y) {
+	
+	if (index != 0) {
+		int* selected = (int*)shop->ui_data;
+		*selected = index;
+	}
+	
+}
+
+void shop_bar_mouse_exit_func (struct gui_component* cpt, int index, float x, float y) {
+	
+	if (index != 0) {
+		int* selected = (int*)shop->ui_data;
+		if (*selected == index) {
+			*selected = -1;
+		}
+	}
+	
+}
+
+void shop_bar_click_func (struct gui_component* cpt, int index, int button, float x, float y) {
+	
+	printf ("INDEX IS %d\n", index);
+	
+}
+
 //------------------- Misc. ----------------------
 
 void toggle_menu () {
 	
 	//Toggles the menu open/closed depending on which one should be used
 	if (inventory->ui->x == -1 && shop->ui->x == -1) {
-		gui_component_show (inventory);
+		gui_component_show (shop_bottom_bar);
 	} else if (inventory->ui->x != -1) {
 		gui_component_hide (inventory);
 	} else if (shop->ui->x != -1) {

@@ -3,7 +3,7 @@ game_deps = game birb viewport tile_map npc game_ui
 game_files = game.o birb.o viewport.o tile_map.o npc.o game_ui.o
 #build the engine
 main: main.c $(game_deps) inputs sprite layout render geometry char_buffer linked_list hash_table json object_handler game_object stack gui glew lodepng
-	gcc -g -Llib main.c $(game_files) inputs.o sprite.o layout.o render.o geometry.o char_buffer.o linked_list.o hash_table.o json.o object_handler.o game_object.o stack.o gui.o glew.o lodepng.o -DGLEW_STATIC -lopengl32 -lglu32 -lfreeglut -o main.exe
+	gcc -g -Llib -Iinclude main.c $(game_files) inputs.o sprite.o layout.o render.o geometry.o char_buffer.o linked_list.o hash_table.o json.o object_handler.o game_object.o stack.o gui.o glew.o lodepng.o -DGLEW_STATIC -lopengl32 -lglu32 -lfreeglut -o main.exe
 inputs: inputs.c inputs.h
 	gcc -g inputs.c -c -LGL -Llib -lopengl32 -lglu32 -lfreeglut -lglew32
 sprite: sprite.c sprite.h

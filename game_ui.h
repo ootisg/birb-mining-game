@@ -39,7 +39,15 @@ struct shop_data {
 	int selected_index;
 };
 
+struct shop_slot_buffer {
+	int slot;
+	int is_loaded;
+	int item_price;
+	unsigned char* image;
+};
+
 typedef struct shop_data shop_data;
+typedef struct shop_slot_buffer shop_slot_buffer;
 
 void init_shop_gui ();
 void init_shop_npc (double x, double y);
@@ -55,5 +63,15 @@ void toggle_menu ();
 
 //Opens the shop menu
 void open_shop ();
+
+//----------------- Shop Bar ---------------------
+
+void init_shop_bar_gui ();
+gui_component* get_shop_bar_gui ();
+void open_shop_bar_gui ();
+void shop_bar_render_func (gui_component* cpt, int index);
+void shop_bar_mouse_enter_func (struct gui_component* cpt, int index, float x, float y);
+void shop_bar_mouse_exit_func (struct gui_component* cpt, int index, float x, float y);
+void shop_bar_click_func (struct gui_component* cpt, int index, int button, float x, float y);
 
 #endif
